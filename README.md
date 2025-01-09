@@ -1,8 +1,10 @@
 # Automatic Time Zone Switcher #
 
-TODO Describe the plugin shortly here.
+Local plugin that detects when a user's location does match their time zone and
+prompts them to update their time zone setting.
 
-TODO Provide more detailed description here.
+Users can dismiss the prompt for 24 hrs, or they can turn it off via their 
+profile settings
 
 ## Installing via uploaded ZIP file ##
 
