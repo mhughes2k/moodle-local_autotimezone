@@ -29,9 +29,50 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('local_autotimezone_settings', new lang_string('pluginname', 'local_autotimezone'));
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
-    if ($ADMIN->fulltree) {
+    if ($ADMIN->fulltree && $ADMIN->locate('localplugins')) {
+        $ADMIN->add('localplugins', $settings);
         // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
 
         // TODO A global on/off setting.
+        $settings->add(new admin_setting_configcheckbox(
+            'local_autotimezone/enabled',
+            get_string('enable', 'local_autotimezone'),
+            get_string('disable', 'local_autotimezone'),
+            0
+        ));
+
+        // Choose which back end to use timezonedb or local.
+        $backends = [
+            'backend_timezonedb' => get_string('backend_timezonedb', 'local_autotimezone'),
+            'backend_local' => get_string('backend_local', 'local_autotimezone'),
+        ];
+
+        $settings->add(new admin_setting_configselect(
+            'local_autotimezone/locationbackend',
+            get_string('locationbackend', 'local_autotimezone'),
+            get_string('locationbackend_desc', 'local_autotimezone'),
+            'backend_timezonedb',
+            $backends
+        ));
+
+        $settings->add(
+            new admin_setting_heading(
+                'backendlocal',
+                get_string('backend_local', 'local_autotimezone'),
+                get_string('backend_local_desc', 'local_autotimezone')
+            ));
+
+        $settings->add(
+            new admin_setting_heading(
+                'backendtimezonedb',
+                get_string('backend_timezonedb', 'local_autotimezone'),
+                get_string('backend_timezonedb_desc', 'local_autotimezone')
+            ));
+        $settings->add(new admin_setting_configtext(
+            'local_autotimezone/timezonedbapikey',
+            get_string('timezonedbapikey', 'local_autotimezone'),
+            get_string('timezonedbapikey_desc', 'local_autotimezone'),
+            ""
+        ));
     }
 }

@@ -33,3 +33,15 @@ $string['disable'] = 'Disable Automatic Time Zone switcher';
 $string['checkdeferred'] = 'Automatic Time Zone switching paused';
 $string['deferswitchcheckuntil'] = 'Automatic Time Zone Switch check delayed until after {$a}.';
 $string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
+$string['backend_local'] = 'Local Backend';
+$string['backend_local_desc'] = 'Local Backend';
+$string['backend_timezonedb'] = 'TimeZoneDB Backend';
+$string['backend_timezonedb_desc'] = 'Use the <a href="https://timezonedb.com/">https://timezonedb.com/</a> API to get the timezone.
+
+This requires registration and an API key to be provided.
+
+A commercial API key is necessary to use this service.';
+$string['locationbackend'] = 'Location Backend';
+$string['locationbackend_desc'] = 'The Location Backend service is used to determine the user\'s timezone based on their location';
+$string['timezonedbapikey'] = 'Timezone DB API Key';
+$string['timezonedbapikey_desc'] = 'Timezone DB API Key';

@@ -19,25 +19,25 @@ defined('MOODLE_INTERNAL') || die;
 function local_autotimezone_after_config() {
     global $PAGE, $USER;
 
-        $user = \core_user::get_user($USER->id);
-        $tz = core_date::get_user_timezone($user);
+    $enabled = get_config('local_autotimezone', 'enabled');
+    if (!$enabled) {
+        return;
+    }
+    // TODO Restrict to only running on "user" space pages, not admin ones?
 
-        $enabled = get_user_preferences('local_autotimezone_enabled', 0);
-        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
-        $shouldruncheck = (time() >= $nextcheck);
-//        debugging("Enabled: $enabled, Next Check: $nextcheck, Sjhoudl run:{$shouldruncheck}");
-        if ($enabled) {
-            if ($shouldruncheck) {
-//                set_user_preference('local_autotimezone_nextcheck', 0);
-                $PAGE->requires->js_call_amd('local_autotimezone/autotimezone', 'init', [
-                    $tz
-                ]);
-            } else {
-//                debugging('Check deferred to ' . userdate($nextcheck));
-            }
-        } else {
-//            debugging('Disabled');
+    $user = \core_user::get_user($USER->id);
+    $tz = core_date::get_user_timezone($user);
+
+    $userenabled = get_user_preferences('local_autotimezone_enabled', 0);
+    $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
+    $shouldruncheck = (time() >= $nextcheck);
+    if ($userenabled) {
+        if ($shouldruncheck) {
+            $PAGE->requires->js_call_amd('local_autotimezone/autotimezone', 'init', [
+                $tz
+            ]);
         }
+    }
 
 }
 
@@ -45,6 +45,10 @@ use core_user\output\myprofile\category;
 use core_user\output\myprofile\node;
 function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tree $tree, \stdClass $user) {
     global $OUTPUT;
+    $enabled = get_config('local_autotimezone', 'enabled');
+    if (!$enabled) {
+        return;
+    }
     $category = new category(
         'local_autotimezone',
         get_string('pluginname', 'local_autotimezone'),

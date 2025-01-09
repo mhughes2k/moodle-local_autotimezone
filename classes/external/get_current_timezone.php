@@ -33,9 +33,24 @@ class get_current_timezone extends \core_external\external_api {
         $user = \core_user::get_user($USER->id);
         $usertz = \core_date::get_user_timezone($user); // Don't user $USER as this is cached.
 
-        $apikey = "VBJ3253GXDUR"; // TODO move to setting.
+        $apikey = get_config('local_autotimezone','timezonedbapikey'); // TODO move to setting.
         $params = self::validate_parameters(self::execute_parameters(), ['latitude' => $latitude, 'longitude' => $longitude]);
 
+        $backend = get_config('local_autotimezone', 'locationbackend');
+        switch (strtolower($backend)) {
+            case 'backend_timezonedb':
+                return self::backend_timezonedb($usertz, $params);
+                break;
+            case 'backend_local':
+                return self::backend_local($usertz, $params);
+                break;
+            default:
+                throw new \coding_exception('invalidbackend');
+        }
+    }
+
+    protected static function backend_timezonedb($usertz, $params) {
+        $apikey = get_config('local_autotimezone', 'timezonedbapikey');
         $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&lat={$params['latitude']}&lng={$params['longitude']}";
 
         $response = \download_file_content($request, null, null, false, false, true);
@@ -57,6 +72,14 @@ class get_current_timezone extends \core_external\external_api {
             'profiletimezone' => $usertz,
             'timezone' => $json->zoneName,
         ];;
+    }
 
+    protected static function backend_local($usertz, $params) {
+        return (object) [
+            'status' => 'match',
+            'message' => "Not implemented, always matches",
+            'profiletimezone' => $usertz,
+            'timezone' => $usertz,
+        ];
     }
 }
