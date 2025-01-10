@@ -18,6 +18,11 @@ import {checkTimezone, deferChecks, updateTimeZone} from './repository';
 //import { saveCancel } from 'core/notification';
 import UpdateIgnoreModal from './modal_update_ignore';
 import Pending from 'core/pending';
+import {getString, getStrings} from 'core/str';
+import { STRINGS } from './autotimezone_strings';
+
+
+var STRING = null;
 /**
  * Automatic Time Zone Switcher.
  * @param {string} currentTimeZone The user's current timezone identifier.
@@ -25,7 +30,16 @@ import Pending from 'core/pending';
 export const init = async (
     currentTimeZone
 ) => {
+    const RESULT_MATCH = "match";
+
     Log.info("Loading autotimezone");
+    const stringValues = await getStrings(
+        STRINGS.map(
+            (key) => ({key, component: 'local_autotimezone'}))
+    );
+    STRING = new Map(STRINGS.map((key, index) => ([key, stringValues[index]])));
+    Log.debug(STRING);
+
     Log.info(currentTimeZone);
     // We need access to the geolocation API.
     if (!navigator.geolocation) {
@@ -43,7 +57,7 @@ export const init = async (
             checkTimezone(pos.coords.latitude, pos.coords.longitude)
             .then((data) => {
                 Log.info(data);
-                if (data.status != "match") {
+                if (data.status != RESULT_MATCH) {
                     Log.warn("No match");
                     Log.info("Current time zone: "+ data.profiletimezone);
                     Log.warn("New time zone "+ data.timezone);
@@ -69,8 +83,6 @@ export const init = async (
                             nextCheck.setTime(now.getTime() + oneDay);
                             Log.info("Stopping location changes for 24 hrs " + nextCheck.toISOString());
                             deferChecks(nextCheck.getTime()/1000);// Convert to unixtimestamp in seconds.
-
-
                         }
                     );
                 }
@@ -90,7 +102,7 @@ export const init = async (
         });
 };
 
-export const updateIgnore = async(profileTz, currentTz, updateCallback, cancelCallback) => {
+export const updateIgnore = async (profileTz, currentTz, updateCallback, cancelCallback) => {
     var pendingPromise = new Pending('local/autotimezone:updateIgnore');
 
     const [
@@ -99,14 +111,21 @@ export const updateIgnore = async(profileTz, currentTz, updateCallback, cancelCa
         import('core/modal_events')
     ]);
 
-    const title = 'Automatic Time Zone Update';
-    const body = '<p>Your current location '+currentTz+' does not match your profile\'s time zone '+profileTz+'.</p>';
+    const title = STRING.get('updatemodaltitle');
+    const body = await getString(
+        'updatemodalbody', 'local_autotimezone',
+        {profileTz: profileTz, currentTz: currentTz}
+    );
+    const updateto = await getString(
+        'updatetimezoneto', 'local_autotimezone',
+        {currentTz: currentTz}
+    );
     const modal = await UpdateIgnoreModal.create({
         title,
         body: body,
         buttons: {
-            save: "Update",
-            cancel: "Ignore for 24 hrs"
+            save: updateto,
+            cancel: STRING.get('ignorefor24hrs')
         },
         removeOnClose : true,
         show:true

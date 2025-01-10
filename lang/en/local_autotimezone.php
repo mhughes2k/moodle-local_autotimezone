@@ -45,3 +45,11 @@ $string['locationbackend'] = 'Location Backend';
 $string['locationbackend_desc'] = 'The Location Backend service is used to determine the user\'s timezone based on their location';
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
+$string['updatetimezone'] = 'Update Timezone';
+$string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
+$string['updatemodaltitle'] = 'Update Timezone';
+$string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
+$string['updatemodalupdatebutton'] = 'Update Timezone';
+$string['ignorefor24hrs'] = 'Ignore for 24 hours';
+// Capability strings
+$string['autotimezone:use'] = 'Allow users to use the Automatic Time Zone Switcher';

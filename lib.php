@@ -20,7 +20,8 @@ function local_autotimezone_after_config() {
     global $PAGE, $USER;
 
     $enabled = get_config('local_autotimezone', 'enabled');
-    if (!$enabled) {
+    $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), null, false);
+    if (!$enabled || ! $allowedtouse) {
         return;
     }
     // TODO Restrict to only running on "user" space pages, not admin ones?
