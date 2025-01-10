@@ -32,10 +32,12 @@ function local_autotimezone_after_config() {
     $userenabled = get_user_preferences('local_autotimezone_enabled', 0);
     $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
     $shouldruncheck = (time() >= $nextcheck);
+    $delay = get_config('local_autotimezone', 'delay');
     if ($userenabled) {
         if ($shouldruncheck) {
             $PAGE->requires->js_call_amd('local_autotimezone/autotimezone', 'init', [
-                $tz
+                $tz,
+                $delay
             ]);
         }
     }

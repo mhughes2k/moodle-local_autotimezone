@@ -19,20 +19,25 @@ import {checkTimezone, deferChecks, updateTimeZone} from './repository';
 import UpdateIgnoreModal from './modal_update_ignore';
 import Pending from 'core/pending';
 import {getString, getStrings} from 'core/str';
-import { STRINGS } from './autotimezone_strings';
+import { DEFAULT_CONFIG, STRINGS } from './common';
 
 
 var STRING = null;
+var CONFIG = null;
 /**
  * Automatic Time Zone Switcher.
  * @param {string} currentTimeZone The user's current timezone identifier.
+ * @param {int} delay Number of seconds to delay checks by.
  */
 export const init = async (
-    currentTimeZone
+    currentTimeZone,
+    delay
 ) => {
     const RESULT_MATCH = "match";
-
+    CONFIG = DEFAULT_CONFIG;
+    CONFIG.delay = delay;
     Log.info("Loading autotimezone");
+    Log.debug(CONFIG);
     const stringValues = await getStrings(
         STRINGS.map(
             (key) => ({key, component: 'local_autotimezone'}))
@@ -77,11 +82,11 @@ export const init = async (
 
                         () => {
                             // Set user preference to not trigger checking for at least 24 hrs.
-                            const oneDay = 24 *60 * 60 * 1000;
+                            const delayms = CONFIG.delay * 1000;
                             const now = new Date();
                             const nextCheck = new Date();
-                            nextCheck.setTime(now.getTime() + oneDay);
-                            Log.info("Stopping location changes for 24 hrs " + nextCheck.toISOString());
+                            nextCheck.setTime(now.getTime() + delayms);
+                            Log.info("Stopping location changes for "+CONFIG.delay +" hrs " + nextCheck.toISOString());
                             deferChecks(nextCheck.getTime()/1000);// Convert to unixtimestamp in seconds.
                         }
                     );
@@ -102,6 +107,14 @@ export const init = async (
         });
 };
 
+/**
+ * Display the warning modal
+ * @param {string} profileTz  Timezone in user's profile.
+ * @param {string} currentTz {string Timezone determined by location.
+ * @param {callback} updateCallback
+ * @param {callback} cancelCallback
+ * @returns {Promise<Modal>}
+ */
 export const updateIgnore = async (profileTz, currentTz, updateCallback, cancelCallback) => {
     var pendingPromise = new Pending('local/autotimezone:updateIgnore');
 
@@ -120,12 +133,16 @@ export const updateIgnore = async (profileTz, currentTz, updateCallback, cancelC
         'updatetimezoneto', 'local_autotimezone',
         {currentTz: currentTz}
     );
+    const ignoreforXhrs =  await getString(
+        'ignoreforXhrs', 'local_autotimezone',
+        {delay: CONFIG.delay / 3600}
+    );
     const modal = await UpdateIgnoreModal.create({
         title,
         body: body,
         buttons: {
             save: updateto,
-            cancel: STRING.get('ignorefor24hrs')
+            cancel: ignoreforXhrs
         },
         removeOnClose : true,
         show:true

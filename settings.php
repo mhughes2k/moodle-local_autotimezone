@@ -27,10 +27,10 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     $settings = new admin_settingpage('local_autotimezone_settings', new lang_string('pluginname', 'local_autotimezone'));
-
+    $ADMIN->add('localplugins', $settings);
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree && $ADMIN->locate('localplugins')) {
-        $ADMIN->add('localplugins', $settings);
+
         // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
 
         // TODO A global on/off setting.
@@ -39,6 +39,13 @@ if ($hassiteconfig) {
             get_string('enable', 'local_autotimezone'),
             get_string('disable', 'local_autotimezone'),
             0
+        ));
+        $settings->add(new admin_setting_configduration(
+            'local_autotimezone/delay',
+            get_string('checkdeferred', 'local_autotimezone'),
+            get_string('deferswitchcheckuntil', 'local_autotimezone'),
+            24 * HOURSECS,
+            HOURSECS
         ));
 
         // Choose which back end to use timezonedb or local.
