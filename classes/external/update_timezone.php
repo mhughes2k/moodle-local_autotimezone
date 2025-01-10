@@ -27,7 +27,7 @@ class update_timezone extends \core_external\external_api {
         $user = \core_user::get_user($USER->id);    // we can only update the calling user.
         $user->timezone = $params['timezone'];
 
-        user_update_user($user);
+        user_update_user($user, false); // DOn't update the password.
         //Reload session user.
         \core\session\manager::set_user($user);
         profile_load_custom_fields($USER);
