@@ -30,7 +30,10 @@ Alternatively, you can run
 to complete the installation from the command line.
 
 ## Configuration ##
-Once installed you must grant the capability `local/autotimezone:config` to the
+Once installed you must:
+
+1. Enable the plugin via the settings.
+2. Grant the capability `local/autotimezone:config` to the
 roles that should be able to use the plugin.
 
 You can grant this to the **Authenticated user** role to allow all users to 
