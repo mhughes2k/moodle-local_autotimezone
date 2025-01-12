@@ -15,41 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die;
+use local_autotimezone\local\hook_callbacks;
 
-function local_autotimezone_after_config() {
-    global $PAGE, $USER;
-
-    $enabled = get_config('local_autotimezone', 'enabled');
-    $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), null, false);
-    if (!$enabled || ! $allowedtouse) {
-        return;
+if ($CFG->branch < 405) {
+    function local_autotimezone_after_config() {
+        hook_callbacks::after_config();
     }
-    // TODO Restrict to only running on "user" space pages, not admin ones?
-
-    $user = \core_user::get_user($USER->id);
-    $tz = core_date::get_user_timezone($user);
-
-    $userenabled = get_user_preferences('local_autotimezone_enabled', 0);
-    $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
-    $shouldruncheck = (time() >= $nextcheck);
-    $delay = get_config('local_autotimezone', 'delay');
-    if ($userenabled) {
-        if ($shouldruncheck) {
-            $PAGE->requires->js_call_amd('local_autotimezone/autotimezone', 'init', [
-                $tz,
-                $delay
-            ]);
-        }
-    }
-
 }
+
 
 use core_user\output\myprofile\category;
 use core_user\output\myprofile\node;
 function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tree $tree, \stdClass $user) {
     global $OUTPUT;
     $enabled = get_config('local_autotimezone', 'enabled');
-    if (!$enabled) {
+    $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), null, false);
+    if (!$enabled || ! $allowedtouse) {
         return;
     }
     $category = new category(

@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,20 +12,22 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Hook callbacks for Automatic Time Zone Switcher
  *
- * @package     local_autotimezone
- * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_autotimezone
+ * @copyright  2025 YOUR NAME <your@email.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_autotimezone';
-$plugin->release = '0.1.0';
-$plugin->version =  2025011001.01;
-$plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_ALPHA;
+$callbacks = [
+    [
+        'hook' => core\hook\after_config::class,
+        'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
+        'priority' => 500,
+    ],
+];
