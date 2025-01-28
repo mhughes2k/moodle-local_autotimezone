@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 namespace local_autotimezone\external;
 
 defined('MOODLE_INTERNAL') || die;
@@ -89,7 +90,9 @@ class get_current_timezone extends \core_external\external_api {
      */
     protected static function backend_timezonedb($usertz, $params) {
         $apikey = get_config('local_autotimezone', 'timezonedbapikey');
-        $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&lat={$params['latitude']}&lng={$params['longitude']}";
+
+        $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&";
+        $request .= "lat={$params['latitude']}&lng={$params['longitude']}";
 
         $response = \download_file_content($request, null, null, false, false, true);
         $json = json_decode($response);

@@ -13,7 +13,9 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 defined('MOODLE_INTERNAL') || die;
+
 /**
  * Declare capabilities for the local_autotimezone plugin.
  * @package     local_autotimezone

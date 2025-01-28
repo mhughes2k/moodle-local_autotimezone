@@ -22,6 +22,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 $functions = [
     'local_autotimezone_get_current_timezone' => [
         'classname' => 'local_autotimezone\external\get_current_timezone',

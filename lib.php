@@ -95,6 +95,10 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
     }
 }
 
+/**
+ * Indicate which user preferences this plugin can update.
+ * @return array[]
+ */
 function local_autotimezone_user_preferences() {
     return [
         'local_autotimezone_enabled' => [

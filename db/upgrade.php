@@ -27,13 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__.'/upgradelib.php');
 
-/**
- * Execute local_autotimezone upgrade from the given old version.
- *
- * @param int $oldversion
- * @return bool
- */
-//function xmldb_local_autotimezone_upgrade($oldversion) {
+///**
+// * Execute local_autotimezone upgrade from the given old version.
+// *
+// * @param int $oldversion
+// * @return bool
+// */
+// function xmldb_local_autotimezone_upgrade($oldversion) {
 //
 //    // For further information please read {@link https://docs.moodle.org/dev/Upgrade_API}.
 //    //
@@ -41,4 +41,4 @@ require_once(__DIR__.'/upgradelib.php');
 //    // Documentation for the XMLDB Editor can be found at {@link https://docs.moodle.org/dev/XMLDB_editor}.
 //
 //    return true;
-//}
+// }    // Because punctuation is necessary.

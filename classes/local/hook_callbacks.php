@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace local_autotimezone\local;
-use \core_user;
-use \core_date;
-use \context_system;
+use core_user;
+use core_date;
+use context_system;
 /**
  * Class hook_callbacks
  *
  * @package    local_autotimezone
- * @copyright  2025 YOUR NAME <your@email.com>
+ * @copyright  2025 University of Strathclyde <learning-technologies@strath.ac.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
