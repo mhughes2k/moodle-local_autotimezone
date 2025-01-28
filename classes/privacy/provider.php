@@ -17,9 +17,14 @@
 /**
  * Privacy Provider for local_autotimezone
  * @copyright 2025 University of Strathclyde <learning-technologies@strath.ac.uk>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package local_autotimezone
  */
-
 class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Return the reason for the privacy provider.
+     * @return string
+     */
     public static function get_reason(): string {
         return 'privacy:metadata';
     }

@@ -13,16 +13,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
+ * Globally shared code for local_autotimezone.
  * @package     local_autotimezone
  * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
 use local_autotimezone\local\hook_callbacks;
 
 if ($CFG->branch < 405) {
+    /**
+     * Prior to 4.5 use the callback approach.
+     * @return void
+     */
     function local_autotimezone_after_config() {
         hook_callbacks::after_config();
     }
@@ -31,10 +36,20 @@ if ($CFG->branch < 405) {
 
 use core_user\output\myprofile\category;
 use core_user\output\myprofile\node;
+
+/**
+ * Add autotimezone controls to the user's profile.
+ * @param \core_user\output\myprofile\tree $tree
+ * @param stdClass $user
+ * @return void
+ * @throws coding_exception
+ * @throws dml_exception
+ * @throws moodle_exception
+ */
 function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tree $tree, \stdClass $user) {
     global $OUTPUT;
     $enabled = get_config('local_autotimezone', 'enabled');
-    $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), null, false);
+    $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), $user, false);
     if (!$enabled || ! $allowedtouse) {
         return;
     }
@@ -67,9 +82,8 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
     $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
     $content = $nextcheck
         ? get_string('deferswitchcheckuntil', 'local_autotimezone', userdate($nextcheck))
-        : ""
-        ;
-    if ($nextcheck) {// CHeck is deferred}
+        : "";
+    if ($nextcheck) { // Check is deferred.
         $tree->add_node(new node(
             'local_autotimezone',
             'deferrcheckuntil',
@@ -85,11 +99,11 @@ function local_autotimezone_user_preferences() {
     return [
         'local_autotimezone_enabled' => [
             'default' => 0,
-            'type' => PARAM_INT
+            'type' => PARAM_INT,
         ],
         'local_autotimezone_nextcheck' => [
             'default' => 0,
-            'type' => PARAM_INT
-        ]
+            'type' => PARAM_INT,
+        ],
     ];
 }

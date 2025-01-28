@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Toggle the autotimezone setting.
  * @package     local_autotimezone
  * @copyright   2025 University of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

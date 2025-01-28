@@ -52,5 +52,5 @@ $string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
 $string['updatemodalupdatebutton'] = 'Update Timezone';
 $string['ignoreforXhrs'] = 'Ignore for {$a->delay} hours';
-// Capability strings
+// Capability strings.
 $string['autotimezone:use'] = 'Allow users to use the Automatic Time Zone Switcher';

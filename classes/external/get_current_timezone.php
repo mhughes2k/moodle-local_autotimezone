@@ -13,8 +13,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 namespace local_autotimezone\external;
+
+defined('MOODLE_INTERNAL') || die;
+
 require_once($CFG->libdir .'/filelib.php');
 
 
@@ -23,12 +25,17 @@ use core_external\external_value;
 use core_external\external_single_structure;
 
 /**
+ * Web service to determine current timezone based on lat/long.
  * @package     local_autotimezone
  * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class get_current_timezone extends \core_external\external_api {
 
+    /**
+     * Define service parameters.
+     * @return external_function_parameters
+     */
     public static function execute_parameters() {
         return new external_function_parameters([
             'latitude' => new external_value(PARAM_RAW, 'Latitude', VALUE_OPTIONAL),
@@ -36,6 +43,10 @@ class get_current_timezone extends \core_external\external_api {
         ]);
     }
 
+    /**
+     * Define return structure.
+     * @return external_single_structure
+     */
     public static function execute_returns() {
         return new external_single_structure([
             'status' => new external_value(PARAM_RAW, 'Status', VALUE_REQUIRED),
@@ -43,7 +54,6 @@ class get_current_timezone extends \core_external\external_api {
             'profiletimezone' => new external_value(PARAM_RAW, 'Timezone set in profile.', VALUE_REQUIRED),
             'timezone' => new external_value(PARAM_RAW, 'Actual geo-located Timezone.', VALUE_REQUIRED),
         ]);
-        //external_value(PARAM_RAW, 'Timezone', VALUE_REQUIRED);
     }
     /**
      * Makes a request to API to convert current lat long to timezone
@@ -55,7 +65,6 @@ class get_current_timezone extends \core_external\external_api {
         $user = \core_user::get_user($USER->id);
         $usertz = \core_date::get_user_timezone($user); // Don't user $USER as this is cached.
 
-        $apikey = get_config('local_autotimezone','timezonedbapikey'); // TODO move to setting.
         $params = self::validate_parameters(self::execute_parameters(), ['latitude' => $latitude, 'longitude' => $longitude]);
 
         $backend = get_config('local_autotimezone', 'locationbackend');
@@ -71,6 +80,13 @@ class get_current_timezone extends \core_external\external_api {
         }
     }
 
+    /**
+     * Autotimezone.com API backend.
+     * @param $usertz
+     * @param $params
+     * @return object
+     * @throws \dml_exception
+     */
     protected static function backend_timezonedb($usertz, $params) {
         $apikey = get_config('local_autotimezone', 'timezonedbapikey');
         $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&lat={$params['latitude']}&lng={$params['longitude']}";
@@ -82,7 +98,7 @@ class get_current_timezone extends \core_external\external_api {
             // We have a mismatch between the user's profile timezone and their browser's location timezone.
             return (object) [
                 'status' => 'moved',
-                'message' => "Profile TZ ({$usertz}) does not match browser TZ ({$json->zoneName}).",// . print_r($json,1),
+                'message' => "Profile TZ ({$usertz}) does not match browser TZ ({$json->zoneName}).",
                 'profiletimezone' => $usertz,
                 'timezone' => $json->zoneName,
             ];
@@ -90,16 +106,22 @@ class get_current_timezone extends \core_external\external_api {
 
         return (object) [
             'status' => 'match',
-            'message' => "Profile TZ ({$usertz}) matches browser TZ ({$json->zoneName}).",//. print_r($json,1),
+            'message' => "Profile TZ ({$usertz}) matches browser TZ ({$json->zoneName}).",
             'profiletimezone' => $usertz,
             'timezone' => $json->zoneName,
         ];;
     }
 
+    /**
+     * Non-API based back end.
+     * @param $usertz
+     * @param $params
+     * @return object
+     */
     protected static function backend_local($usertz, $params) {
         return (object) [
             'status' => 'match',
-            'message' => "Not implemented, always matches",
+            'message' => "Not implemented, always matches ({$params['latitude']}&lng={$params['longitude']})",
             'profiletimezone' => $usertz,
             'timezone' => $usertz,
         ];
