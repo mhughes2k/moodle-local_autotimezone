@@ -24,10 +24,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$callbacks = [
-    [
-        'hook' => \core\hook\after_config::class,
-        'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
-        'priority' => 500,
-    ],
-];
+if ($CFG->branch > 404) {
+    $callbacks = [
+        [
+            'hook' => \core\hook\after_config::class,
+            'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
+            'priority' => 500,
+        ],
+    ];
+} else {
+    $callbacks = [
+        [
+            'hook' => \core\hook\after_config::class,
+            'callback' => "\local_autotimezone\local\hook_callbacks::after_config",
+            'priority' => 500,
+        ],
+    ];
+}
