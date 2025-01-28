@@ -13,7 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-global $CFG;
 
 /**
  * Hook callbacks for Automatic Time Zone Switcher
@@ -23,6 +22,8 @@ global $CFG;
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
 
 if ($CFG->branch > 404) {
     $callbacks = [

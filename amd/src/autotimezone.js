@@ -70,30 +70,33 @@ export const init = async(
                     // We really want this to be *non*-interruptive, but noticeable.
                     updateIgnore(
                         data.profiletimezone,
-                        data.timezone,
-                        () => {
-                            Log.info("Updating time zone to " + data.timezone);
-                            updateTimeZone(data.timezone).then(() => {
-                                window.location.reload();
-                                return true;
-                            })
-                            .fail(() => {
-                                Log.error("Failed to update time zone");
-                                return false;
-                            });
-
-                        },
-
-                        () => {
-                            // Set user preference to not trigger checking for at least 24 hrs.
-                            const delayms = CONFIG.delay * 1000;
-                            const now = new Date();
-                            const nextCheck = new Date();
-                            nextCheck.setTime(now.getTime() + delayms);
-                            Log.info("Stopping location changes for " + CONFIG.delay + " hrs " + nextCheck.toISOString());
-                            deferChecks(nextCheck.getTime() / 1000);// Convert to unixtimestamp in seconds.
-                        }
+                        data.timezone
                     );
+                    //     // Moodle CI complains about not nesting promises here, but it's not really.
+                    //     // the callbacks are passed to the modal.
+                    //     () => {
+                    //         Log.info("Updating time zone to " + data.timezone);
+                    //         updateTimeZone(data.timezone).then(() => {
+                    //             window.location.reload();
+                    //             return true;
+                    //         })
+                    //         .fail(() => {
+                    //             Log.error("Failed to update time zone");
+                    //             return false;
+                    //         });
+                    //
+                    //     },
+                    //
+                    //     () => {
+                    //         // Set user preference to not trigger checking for at least 24 hrs.
+                    //         const delayms = CONFIG.delay * 1000;
+                    //         const now = new Date();
+                    //         const nextCheck = new Date();
+                    //         nextCheck.setTime(now.getTime() + delayms);
+                    //         Log.info("Stopping location changes for " + CONFIG.delay + " hrs " + nextCheck.toISOString());
+                    //         deferChecks(nextCheck.getTime() / 1000);// Convert to unixtimestamp in seconds.
+                    //     }
+                    // );
                 }
                 navigator.geolocation.clearWatch(watchid);
                 return true;
@@ -121,7 +124,7 @@ export const init = async(
  * @param {callback} cancelCallback
  * @returns {Promise<Modal>}
  */
-export const updateIgnore = async(profileTz, currentTz, updateCallback, cancelCallback) => {
+export const updateIgnore = async(profileTz, currentTz) => { //, updateCallback, cancelCallback) => {
     var pendingPromise = new Pending('local/autotimezone:updateIgnore');
 
     const [
@@ -153,8 +156,28 @@ export const updateIgnore = async(profileTz, currentTz, updateCallback, cancelCa
         removeOnClose: true,
         show: true
     });
-    modal.getRoot().on(ModalEvents.save, updateCallback);
-    modal.getRoot().on(ModalEvents.cancel, cancelCallback);
+    // modal.getRoot().on(ModalEvents.save, updateCallback);
+    modal.getRoot().on(ModalEvents.save, () => {
+        Log.info("Updating time zone to " + currentTz);
+        updateTimeZone(currentTz).then(() => {
+            window.location.reload();
+            return true;
+        })
+            .fail(() => {
+                Log.error("Failed to update time zone");
+                return false;
+            });
+    });
+    // modal.getRoot().on(ModalEvents.cancel, cancelCallback);
+    modal.getRoot().on(ModalEvents.cancel, () => {
+        // Set user preference to not trigger checking for at least 24 hrs.
+        const delayms = CONFIG.delay * 1000;
+        const now = new Date();
+        const nextCheck = new Date();
+        nextCheck.setTime(now.getTime() + delayms);
+        Log.info("Stopping location changes for " + CONFIG.delay + " hrs " + nextCheck.toISOString());
+        deferChecks(nextCheck.getTime() / 1000);// Convert to unixtimestamp in seconds.
+    });
     pendingPromise.resolve();
     return modal;
 };
