@@ -36,8 +36,6 @@ require_once(__DIR__.'/upgradelib.php');
 function xmldb_local_autotimezone_upgrade($oldversion) {
     global $DB;
 
-    $dbman = $DB->get_manager();
-
     // For further information please read {@link https://docs.moodle.org/dev/Upgrade_API}.
     //
     // You will also have to create the db/install.xml file by using the XMLDB Editor.

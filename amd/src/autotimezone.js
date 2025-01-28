@@ -15,7 +15,6 @@
 
 import Log from 'core/log';
 import {checkTimezone, deferChecks, updateTimeZone} from './repository';
-//import { saveCancel } from 'core/notification';
 import UpdateIgnoreModal from './modal_update_ignore';
 import Pending from 'core/pending';
 import {getString, getStrings} from 'core/str';

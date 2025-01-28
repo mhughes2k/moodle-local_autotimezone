@@ -16,17 +16,17 @@
 
 /**
  * Hook callbacks for Automatic Time Zone Switcher
- *
- * @package    local_autotimezone
- * @copyright  2025 YOUR NAME <your@email.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_autotimezone
+ * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 
 defined('MOODLE_INTERNAL') || die();
 
 $callbacks = [
     [
-        'hook' => core\hook\after_config::class,
+        'hook' => \core\hook\after_config::class,
         'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
         'priority' => 500,
     ],

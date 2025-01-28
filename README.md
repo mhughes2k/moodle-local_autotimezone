@@ -6,6 +6,12 @@ prompts them to update their time zone setting.
 Users can dismiss the prompt for 24 hrs, or they can turn it off via their 
 profile settings
 
+## Subscription
+At present a subscription to the TimeZoneDB service is required to use this 
+plugin.
+
+A non-subscription version is planned.
+
 ## Installing via uploaded ZIP file ##
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
@@ -49,9 +55,9 @@ When enabled, you can return to this page to disable the automatic switching.
 ### Location Detection ###
 There are 2 backend options to determining the user's timezone.
 
-The **TimeZoneDB** backend uses the timezoneDB service to determine the 
+The **TimeZoneDB** backend uses the timezoneDB Service to determine the 
 user's timezone from their geolocation. This requires an API key, and may 
-need a commercial subscription for use.
+need a Commercial Subscription for use.
 
 The **Local** backend attempts to determine the user's location from their 
 geolocation without using any external API. **This is in development**.

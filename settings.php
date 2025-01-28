@@ -19,7 +19,7 @@
  *
  * @package     local_autotimezone
  * @category    admin
- * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
+ * @copyright   2025 University of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

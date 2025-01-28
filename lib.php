@@ -13,6 +13,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * @package     local_autotimezone
+ * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die;
 use local_autotimezone\local\hook_callbacks;

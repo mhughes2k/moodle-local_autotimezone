@@ -43,6 +43,7 @@ This requires registration and an API key to be provided.
 A commercial API key is necessary to use this service.';
 $string['locationbackend'] = 'Location Backend';
 $string['locationbackend_desc'] = 'The Location Backend service is used to determine the user\'s timezone based on their location';
+$string['privacy:metadata'] = 'The Automatic Time Zone Switcher plugin access Browser Geolocation Sensor data & existing User Profile Timezone data, it does not store any personal data.';
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
 $string['updatetimezone'] = 'Update Timezone';
