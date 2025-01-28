@@ -18,9 +18,7 @@ namespace local_autotimezone\external;
 
 defined('MOODLE_INTERNAL') || die;
 
-#use core_external\external_function_parameters;
 use core_external\external_value;
-use core_external\external_single_structure;
 require_once($CFG->dirroot . '/user/lib.php');
 
 /**

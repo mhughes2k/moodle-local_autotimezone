@@ -18,6 +18,7 @@ defined('MOODLE_INTERNAL') || die;
 
 /**
  * Declare capabilities for the local_autotimezone plugin.
+ *
  * @package     local_autotimezone
  * @copyright   2025 Univesity of Strathclyde <learning-technologies@strath.ac.uk>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
