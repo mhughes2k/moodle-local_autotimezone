@@ -36,7 +36,7 @@ export const deferChecks = (nextCheck) => fetchMany([{
 }])[0];
 
 export const updateTimeZone = (newZone) => fetchMany([{
-    methodname:'local_autotimezone_update_timezone',
+    methodname: 'local_autotimezone_update_timezone',
     args: {
        timezone: newZone
     }

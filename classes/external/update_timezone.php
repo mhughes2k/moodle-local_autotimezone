@@ -48,7 +48,7 @@ class update_timezone extends \core_external\external_api {
     }
     /**
      * Makes a request to API to convert current lat long to timezone
-     * @return mixed
+     * @return void
      * @throws \dml_exception
      */
     public static function execute($timezone) {
@@ -62,6 +62,5 @@ class update_timezone extends \core_external\external_api {
         // Reload session user.
         \core\session\manager::set_user($user);
         profile_load_custom_fields($USER);
-        return;
     }
 }

@@ -24,15 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-$string['pluginname'] = 'Automatic Time Zone Switcher';
-
-$string['enable'] = 'Enable Automatic Time Zone switcher';
-$string['disable'] = 'Disable Automatic Time Zone switcher';
-
-$string['checkdeferred'] = 'Automatic Time Zone switching paused';
-$string['deferswitchcheckuntil'] = 'Automatic Time Zone Switch check delayed until after {$a}.';
-$string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
+$string['autotimezone:use'] = 'Allow users to use the Automatic Time Zone Switcher';
 $string['backend_local'] = 'Local Backend';
 $string['backend_local_desc'] = 'Local Backend';
 $string['backend_timezonedb'] = 'TimeZoneDB Backend';
@@ -41,8 +33,14 @@ $string['backend_timezonedb_desc'] = 'Use the <a href="https://timezonedb.com/">
 This requires registration and an API key to be provided.
 
 A commercial API key is necessary to use this service.';
+$string['checkdeferred'] = 'Automatic Time Zone switching paused';
+$string['enable'] = 'Enable Automatic Time Zone switcher';
+$string['disable'] = 'Disable Automatic Time Zone switcher';
+$string['deferswitchcheckuntil'] = 'Automatic Time Zone Switch check delayed until after {$a}.';
+$string['ignoreforXhrs'] = 'Ignore for {$a->delay} hours';
 $string['locationbackend'] = 'Location Backend';
 $string['locationbackend_desc'] = 'The Location Backend service is used to determine the user\'s timezone based on their location';
+$string['pluginname'] = 'Automatic Time Zone Switcher';
 $string['privacy:metadata'] = 'The Automatic Time Zone Switcher plugin access Browser Geolocation Sensor data & existing User Profile Timezone data, it does not store any personal data.';
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
@@ -51,6 +49,5 @@ $string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
 $string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
 $string['updatemodalupdatebutton'] = 'Update Timezone';
-$string['ignoreforXhrs'] = 'Ignore for {$a->delay} hours';
-// Capability strings.
-$string['autotimezone:use'] = 'Allow users to use the Automatic Time Zone Switcher';
+$string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
+

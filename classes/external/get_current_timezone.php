@@ -83,12 +83,14 @@ class get_current_timezone extends \core_external\external_api {
 
     /**
      * Autotimezone.com API backend.
-     * @param $usertz
-     * @param $params
+     * @param string $usertz
+     * @param string $params
+     * @param {string} $usertz User's timezone from profile.
+     * @param {string[]} $params Web Service Parameters.
      * @return object
      * @throws \dml_exception
      */
-    protected static function backend_timezonedb($usertz, $params) {
+    protected static function backend_timezonedb(string $usertz, array $params): object {
         $apikey = get_config('local_autotimezone', 'timezonedbapikey');
 
         $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&";
@@ -117,11 +119,11 @@ class get_current_timezone extends \core_external\external_api {
 
     /**
      * Non-API based back end.
-     * @param $usertz
-     * @param $params
-     * @return object
+     * @param {string} $usertz User's timezone from profile.
+     * * @param {string[]} $params Web Service Parameters.
+ * @return object
      */
-    protected static function backend_local($usertz, $params) {
+    protected static function backend_local(string $usertz, array $params): object {
         return (object) [
             'status' => 'match',
             'message' => "Not implemented, always matches ({$params['latitude']}&lng={$params['longitude']})",

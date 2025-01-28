@@ -33,6 +33,6 @@ require_once(__DIR__.'/upgradelib.php');
  * @param int $oldversion
  * @return bool
  */
- function xmldb_local_autotimezone_upgrade($oldversion) {
-     return true;
- }
+function xmldb_local_autotimezone_upgrade($oldversion) {
+    return true;
+}
