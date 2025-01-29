@@ -34,9 +34,9 @@ This requires registration and an API key to be provided.
 
 A commercial API key is necessary to use this service.';
 $string['checkdeferred'] = 'Automatic Time Zone switching paused';
-$string['enable'] = 'Enable Automatic Time Zone switcher';
-$string['disable'] = 'Disable Automatic Time Zone switcher';
 $string['deferswitchcheckuntil'] = 'Automatic Time Zone Switch check delayed until after {$a}.';
+$string['disable'] = 'Disable Automatic Time Zone switcher';
+$string['enable'] = 'Enable Automatic Time Zone switcher';
 $string['ignoreforXhrs'] = 'Ignore for {$a->delay} hours';
 $string['locationbackend'] = 'Location Backend';
 $string['locationbackend_desc'] = 'The Location Backend service is used to determine the user\'s timezone based on their location';
@@ -46,8 +46,8 @@ $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
 $string['updatetimezone'] = 'Update Timezone';
 $string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
-$string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
+$string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalupdatebutton'] = 'Update Timezone';
 $string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
 
