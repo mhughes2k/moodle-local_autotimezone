@@ -120,11 +120,9 @@ export const init = async(
  * Display the warning modal
  * @param {string} profileTz  Timezone in user's profile.
  * @param {string} currentTz {string Timezone determined by location.
- * @param {callback} updateCallback
- * @param {callback} cancelCallback
  * @returns {Promise<Modal>}
  */
-export const updateIgnore = async(profileTz, currentTz) => { //, updateCallback, cancelCallback) => {
+export const updateIgnore = async(profileTz, currentTz) => {
     var pendingPromise = new Pending('local/autotimezone:updateIgnore');
 
     const [
@@ -156,7 +154,7 @@ export const updateIgnore = async(profileTz, currentTz) => { //, updateCallback,
         removeOnClose: true,
         show: true
     });
-    // modal.getRoot().on(ModalEvents.save, updateCallback);
+
     modal.getRoot().on(ModalEvents.save, () => {
         Log.info("Updating time zone to " + currentTz);
         updateTimeZone(currentTz).then(() => {
@@ -168,7 +166,7 @@ export const updateIgnore = async(profileTz, currentTz) => { //, updateCallback,
                 return false;
             });
     });
-    // modal.getRoot().on(ModalEvents.cancel, cancelCallback);
+
     modal.getRoot().on(ModalEvents.cancel, () => {
         // Set user preference to not trigger checking for at least 24 hrs.
         const delayms = CONFIG.delay * 1000;

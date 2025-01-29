@@ -120,8 +120,8 @@ class get_current_timezone extends \core_external\external_api {
     /**
      * Non-API based back end.
      * @param {string} $usertz User's timezone from profile.
-     * * @param {string[]} $params Web Service Parameters.
- * @return object
+     * @param {string[]} $params Web Service Parameters.
+     * @return object
      */
     protected static function backend_local(string $usertz, array $params): object {
         return (object) [
