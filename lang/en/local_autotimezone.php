@@ -44,10 +44,10 @@ $string['pluginname'] = 'Automatic Time Zone Switcher';
 $string['privacy:metadata'] = 'The Automatic Time Zone Switcher plugin access Browser Geolocation Sensor data & existing User Profile Timezone data, it does not store any personal data.';
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
-$string['updatetimezone'] = 'Update Timezone';
-$string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
 $string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
 $string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalupdatebutton'] = 'Update Timezone';
+$string['updatetimezone'] = 'Update Timezone';
+$string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
 $string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
 
