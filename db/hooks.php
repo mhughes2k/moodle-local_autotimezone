@@ -32,12 +32,22 @@ if ($CFG->branch > 404) {
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
             'priority' => 500,
         ],
+        [
+            'hook' => core\hook\output\after_standard_main_region_html_generation::class,
+            'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension'],
+            'priority' => 500,
+        ],
     ];
 } else {
     $callbacks = [
         [
             'hook' => \core\hook\after_config::class,
             'callback' => "\local_autotimezone\local\hook_callbacks::after_config",
+            'priority' => 500,
+        ],
+        [
+            'hook' => core\hook\output\after_standard_main_region_html_generation::class,
+            'callback' => "\local_autotimezone\local\hook_callbacks::load_datetime_tz_extension",
             'priority' => 500,
         ],
     ];

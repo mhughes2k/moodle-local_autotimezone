@@ -18,6 +18,8 @@ namespace local_autotimezone\local;
 use core_user;
 use core_date;
 use context_system;
+
+use core\hook\output\after_standard_main_region_html_generation;
 /**
  * Class hook_callbacks
  *
@@ -34,6 +36,7 @@ class hook_callbacks {
      */
     public static function after_config() {
         global $PAGE, $USER;
+        return;
         if (during_initial_install()) {
             return;
         }
@@ -59,5 +62,84 @@ class hook_callbacks {
                 ]);
             }
         }
+    }
+
+    /**
+     * @var string The name of the custom course field that holds a timezone value (e.g. "Asia/Bahrain").
+     */
+    static $timezonecustomfieldname = 'modulelocation';
+    static $timezonecustomfieldid = null;
+    /**
+     * Load timezone extension for date-time selectors.
+     * @param after_standard_main_region_html_generation $hook
+     * @return void
+     */
+    public static function load_datetime_tz_extension(after_standard_main_region_html_generation $hook) :void {
+        global $USER;
+        $context = $hook->renderer->get_page()->context;
+
+        if ($context->contextlevel != CONTEXT_COURSE) {
+            $context = $context->get_course_context(false);
+        }
+        if ($context === false) {
+            return;
+        }
+        $course = get_course($context->instanceid);
+
+        $handler = \core_customfield\handler::get_handler('core_course', 'course');
+        $fields = $handler->get_fields();
+        $courseTimeZone = hook_callbacks::get_custom_field_data($course, hook_callbacks::$timezonecustomfieldname);
+
+        $isDifferentTimezone = false;
+        $isDifferentServerTimezone = false;
+        $servertimezone = get_config('core', 'timezone');
+        if ($courseTimeZone !== "") {
+            $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
+        }
+
+        $isDifferentUserTimezone = $USER->timezone !== $courseTimeZone;
+        $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
+        $tone = 'red';  // TODO this should be a style rule.
+        if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
+            // User's prefs match the course.
+            $tone = 'green';
+        }
+
+        $hook->renderer->get_page()->requires->js_call_amd(
+            'local_strath/dateselector-tz',
+            'init',
+            [
+                $tone,
+                $isDifferentTimezone,
+                $courseTimeZone,
+                $USER->timezone,
+                $servertimezone,
+                $isDifferentServerTimezone,
+                $isDifferentUserTimezone
+            ]
+        );
+    }
+
+    static $coursetimezone_cache = [];
+    static function get_custom_field_data($course, $name = false) {
+        // TODO Caching
+        if (isset(hook_callbacks::$coursetimezone_cache[$course->id])) {
+            $rv = hook_callbacks::$coursetimezone_cache[$course->id];
+        } else {
+            // Fetch data.
+            $handler = \core_customfield\handler::get_handler('core_course', 'course');
+            $fields = $handler->get_fields();
+            // MTTT-275 Need to use the $returnall = true otherwise we don't see the banner configuration if we're a student.
+            $datas = $handler->export_instance_data($course->id, true);
+            $rv = new \stdClass();
+            foreach ($datas as $d) {
+                $rv->{$d->get_shortname()} = $d->get_data_controller()->get_value();
+            }
+            hook_callbacks::$coursetimezone_cache[$course->id] = $rv;
+        }
+        if ($name !== false) {
+            return $rv->$name;
+        }
+        return $rv;
     }
 }
