@@ -106,7 +106,7 @@ class hook_callbacks {
         }
 
         $hook->renderer->get_page()->requires->js_call_amd(
-            'local_strath/dateselector-tz',
+            'local_autotimezone/dateselector-tz',
             'init',
             [
                 $tone,

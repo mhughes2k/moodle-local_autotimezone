@@ -104,7 +104,7 @@ export const init = async (tone,
             {"name": "alt", "value": message  + userMessage + serverMessage}
         ]
     };
-    Templates.renderForPromise('local_strath/timezonebadge', context)
+    Templates.renderForPromise('local_autotimezone/timezonebadge', context)
         .then(({html, js}) => {
             log.debug(html);
             // Add the badge to each selector
