@@ -24,11 +24,31 @@
 require_once(__DIR__ . '/../../config.php');
 require_login();
 
+const ACTION_DISABLE = 0;
+const ACTION_ENABLE = 1;
+const ACTION_CHECKNOW = 2;
+const ACTION_PAUSE = 3;
+
 $state = required_param('enable', PARAM_INT);
 
-set_user_preference('local_autotimezone_enabled', $state);
 // If we're turning on we set next check to be 0 so that checks happen.
-if ($state = 1) {
-    set_user_preference('local_autotimezone_nextcheck', 0);
+switch ($state) {
+    case ACTION_ENABLE:
+        set_user_preference('local_autotimezone_enabled', 1);
+        break;
+    case ACTION_DISABLE:
+        set_user_preference('local_autotimezone_enabled', 0);
+        break;
+    case ACTION_CHECKNOW:
+        set_user_preference('local_autotimezone_nextcheck', 0);
+        break;
+    case ACTION_PAUSE:
+        $delay = get_config('local_autotimezone', 'delay');
+        $nextcheck = time() + ($delay * 3600);
+        set_user_preference('local_autotimezone_nextcheck', $nextcheck);
+        break;
+    default:
+        throw new \moodle_exception('invalidaction');
 }
+
 redirect(new \moodle_url('/user/profile.php'));

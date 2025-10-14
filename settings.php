@@ -30,9 +30,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', $settings);
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree && $ADMIN->locate('localplugins')) {
-
-        // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
-
+        $checkresult = \local_autotimezone\local\hook_callbacks::check_config(true);
         // TODO A global on/off setting.
         $settings->add(new admin_setting_configcheckbox(
             'local_autotimezone/enabled',
@@ -40,6 +38,30 @@ if ($hassiteconfig) {
             get_string('disable', 'local_autotimezone'),
             0
         ));
+        $settings->add(new admin_setting_configcheckbox(
+            'local_autotimezone/datetimeenhancementsenabled',
+            get_string('enabledatetimeenhancementsenabled', 'local_autotimezone'),
+            get_string('enabledatetimeenhancementsenabled_desc', 'local_autotimezone'),
+            0
+        ));
+
+        $handler = \core_customfield\handler::get_handler('core_course', 'course');
+        $fields = $handler->get_fields();
+        // var_dump($fields);
+        // Extract the shortname and name into a simple array for the options.
+        $fieldopts = ['' => get_string('disabled', 'local_autotimezone')];
+        foreach ($fields as $field) {
+            $fieldopts[$field->get('shortname')] = $field->get('name');
+        }
+        // Field to use setting.
+        $settings->add(new admin_setting_configselect(
+            'local_autotimezone/coursetimezonefield',
+            get_string('coursetimezonefield', 'local_autotimezone'),
+            get_string('coursetimezonefield_desc', 'local_autotimezone'),
+            '',
+            $fieldopts
+        ));
+
         $settings->add(new admin_setting_configduration(
             'local_autotimezone/delay',
             get_string('checkdeferred', 'local_autotimezone'),
@@ -47,6 +69,24 @@ if ($hassiteconfig) {
             24 * HOURSECS,
             HOURSECS
         ));
+
+        // TODO Add output to the settings page that indicates if the plugin is correctly configured.
+        $settings->add(
+            new admin_setting_heading(
+                'local_autotimezone/configcheck',
+                get_string('configcheck', 'local_autotimezone'),
+                \html_writer::alist(empty($checkresult) ? [get_string('configok', 'local_autotimezone')] : $checkresult)
+            )
+        );
+
+        $settings->add(
+            new admin_setting_heading(
+                'local_autotimezone/servicebackend',
+                get_string('locationbackend', 'local_autotimezone'),
+                get_string('locationbackend_desc', 'local_autotimezone')
+            )
+        );
+
 
         // Choose which back end to use timezonedb or local.
         $backends = [

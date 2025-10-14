@@ -20,6 +20,8 @@ use core_date;
 use context_system;
 
 use core\hook\output\after_standard_main_region_html_generation;
+use DB;
+
 /**
  * Class hook_callbacks
  *
@@ -28,20 +30,85 @@ use core\hook\output\after_standard_main_region_html_generation;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
+    const DEFAULT_FIELDNAME = 'modulelocation';
     /**
-     * Handle the after_config hook call.
+     * @var string The name of the custom course field that holds a timezone value (e.g. "Asia/Bahrain").
+     */
+    static $timezonecustomfieldname = self::DEFAULT_FIELDNAME;
+    static $timezonecustomfieldid = null;
+
+    const MODE_SWITCHER = 'switcher';
+    const MODE_DATETIMEENHANCEMENTS = 'datetimeenhancements';
+    static $isAvailable = null;
+    /**
+     * Check that the plugin is correctly configured.
+     * Note we're not checking enablement here, just configuration.
+     * @param array|bool $issues If fullreport is true, this will be populated with any issues found. Otherwise simple true / false if config was OK or not
+     */
+    public static function check_config($fullreport = false): array | bool {
+        $issues = [];
+
+        // We always load the fieldname from config.
+        self::$timezonecustomfieldname = get_config('local_autotimezone', 'coursetimezonefield');
+        if (empty(self::$timezonecustomfieldname)) {
+            $issues[] = get_string('fieldnotset', 'local_autotimezone');
+            if (!$fullreport) {
+                return false;
+            }
+        }
+        // Check the static cache on the class so we don't loop if
+        // we've already done it in this request: it's unlikely to change.
+        if (!$fullreport && !is_null(self::$isAvailable)) {
+            return self::$isAvailable;
+        }
+        // Full field check.
+        // Potentially this gets extended if we had multiple fields that *need*
+        // to have been set up.
+        $fieldfound = false;
+        $handler = \core_customfield\handler::get_handler('core_course', 'course');
+        foreach ($handler->get_fields() as $field) {
+            if ($field->get('shortname') === self::$timezonecustomfieldname) {
+                $fieldfound = true;
+                break; // We don't need to continue as we found the necesary field.
+            }
+        }
+        if (!$fieldfound) {
+            $issues[] = get_string('missingfield', 'local_autotimezone', self::$timezonecustomfieldname);
+            $issues[] = get_string('howtocreatefield', 'local_autotimezone');
+            // If field doesn't exist disable to the plugin.
+            self::$isAvailable = false;
+            set_config('enabled', 0, 'local_autotimezone');
+            if (!$fullreport) {
+                return false;
+            }
+        }
+        self::$isAvailable = $fieldfound;
+        if ($fullreport) {
+            return $issues;
+        }
+        return $fieldfound;
+    }
+
+    /**
+     * Handle the after_config hook call to load switcher.
      * @return void
      * @throws \coding_exception
      * @throws \dml_exception
      */
     public static function after_config() {
-        global $PAGE, $USER;
-        return;
+        global $PAGE, $USER, $COURSE;
         if (during_initial_install()) {
             return;
         }
+        
+        // This doesn't work if we're not logged in.
+        if (isguestuser() || !isloggedin()) {
+            return;
+        }
+
         $enabled = get_config('local_autotimezone', 'enabled');
-        $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), null, false);
+       
+        $allowedtouse = has_capability('local/autotimezone:use', \core\context\system::instance(), null, false);
         if (!$enabled || !$allowedtouse) {
             return;
         }
@@ -49,9 +116,12 @@ class hook_callbacks {
 
         $user = core_user::get_user($USER->id);
         $tz = core_date::get_user_timezone($user);
+        if (!is_null($COURSE)) {
+            $coursetz  = self::get_custom_field_data($COURSE, self::$timezonecustomfieldname);
+        }
 
         $userenabled = get_user_preferences('local_autotimezone_enabled', 0);
-        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
+        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);        
         $shouldruncheck = (time() >= $nextcheck);
         $delay = get_config('local_autotimezone', 'delay');
         if ($userenabled) {
@@ -64,11 +134,7 @@ class hook_callbacks {
         }
     }
 
-    /**
-     * @var string The name of the custom course field that holds a timezone value (e.g. "Asia/Bahrain").
-     */
-    static $timezonecustomfieldname = 'modulelocation';
-    static $timezonecustomfieldid = null;
+
     /**
      * Load timezone extension for date-time selectors.
      * @param after_standard_main_region_html_generation $hook
@@ -76,6 +142,16 @@ class hook_callbacks {
      */
     public static function load_datetime_tz_extension(after_standard_main_region_html_generation $hook) :void {
         global $USER;
+        // Check enablement first.
+        $enabled = get_config('local_autotimezone', 'datetimeenhancementsenabled');
+        if (!$enabled) {
+            return;
+        }
+        // This doesn't work if we're not logged in.
+        if (isguestuser() || !isloggedin()) {
+            return;
+        }
+
         $context = $hook->renderer->get_page()->context;
 
         if ($context->contextlevel != CONTEXT_COURSE) {
@@ -85,43 +161,67 @@ class hook_callbacks {
             return;
         }
         $course = get_course($context->instanceid);
+        // This will return false if not configured correctly.
+        if ($courseTimeZone = self::get_custom_field_data($course, self::$timezonecustomfieldname)) {
+            // Note, these are the timezones, not the values.
+            $usertz = core_date::get_user_timezone();
+            $servertz = core_date::get_server_timezone();
 
-        $handler = \core_customfield\handler::get_handler('core_course', 'course');
-        $fields = $handler->get_fields();
-        $courseTimeZone = hook_callbacks::get_custom_field_data($course, hook_callbacks::$timezonecustomfieldname);
-
-        $isDifferentTimezone = false;
-        $isDifferentServerTimezone = false;
-        $servertimezone = get_config('core', 'timezone');
-        if ($courseTimeZone !== "") {
+            $isDifferentTimezone = false;
+            $isDifferentServerTimezone = false;
+            $servertimezone = get_config('core', 'timezone');
+            if ($courseTimeZone === "") {
+                $courseTimeZone = $servertimezone;  // Course defaults to server time zone.
+            }
             $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
-        }
 
-        $isDifferentUserTimezone = $USER->timezone !== $courseTimeZone;
-        $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
-        $tone = 'red';  // TODO this should be a style rule.
-        if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
-            // User's prefs match the course.
-            $tone = 'green';
-        }
+            $isDifferentUserTimezone = $usertz !== $courseTimeZone;
+            $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
+            $tone = 'red';  // TODO this should be a style rule.
+            if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
+                // User's prefs match the course.
+                $tone = 'green';
+            }
 
-        $hook->renderer->get_page()->requires->js_call_amd(
-            'local_autotimezone/dateselector-tz',
-            'init',
-            [
-                $tone,
-                $isDifferentTimezone,
-                $courseTimeZone,
-                $USER->timezone,
-                $servertimezone,
-                $isDifferentServerTimezone,
-                $isDifferentUserTimezone
-            ]
-        );
+            // echo(\html_writer::tag('pre',
+            //     "Course timezone is \"$courseTimeZone\"\n user timezone is \"$usertz\"\n \$USER->timezone is {$USER->timezone}\n server timezone is \"$servertz\"" .
+            //     "\n usertz: {$usertz}\n servertz: {$servertz}\n servertimezone: {$servertimezone}" .
+            //     "\n isDifferentUserTimezone = " . ($isDifferentUserTimezone ? 'true' : 'false').
+            //     "\n isDifferentServerTimezone = " . ($isDifferentServerTimezone ? 'true' : 'false') .
+            //     "\n isDifferentTimezone = " . ($isDifferentTimezone ? 'true' : 'false') 
+            // ));
+
+            $hook->renderer->get_page()->requires->js_call_amd(
+                'local_autotimezone/dateselector-tz',
+                'init',
+                [
+                    $tone,
+                    $isDifferentTimezone,
+                    $courseTimeZone,
+                    $usertz,
+                    $servertz,
+                    $isDifferentServerTimezone,
+                    $isDifferentUserTimezone
+                ]
+            );
+        } else {
+            debugging('Not loading course timezone as not configured correctly', DEBUG_DEVELOPER);
+        }
     }
 
     static $coursetimezone_cache = [];
-    static function get_custom_field_data($course, $name = false) {
+    /**
+     * Returns either a single value for a named field, or the all of the values for a course.
+     * @param \stdClass $course The
+     * @param string|bool $name The name of the field to return, or false to return all fields.
+     * @return \stdClass|string|bool The value of the field, or all fields, or false on error.
+     * @throws \dml_exception
+     */
+    static function get_custom_field_data($course, $name = false): \stdClass | string | bool {
+        $rv = false;
+        if (self::check_config() === false) {
+            return false;
+        }
         // TODO Caching
         if (isset(hook_callbacks::$coursetimezone_cache[$course->id])) {
             $rv = hook_callbacks::$coursetimezone_cache[$course->id];
@@ -137,7 +237,12 @@ class hook_callbacks {
             }
             hook_callbacks::$coursetimezone_cache[$course->id] = $rv;
         }
+        // We want just 1 value.
         if ($name !== false) {
+            if (!property_exists($rv, $name)) {
+                debugging("Requested custom field $name does not exist on course {$course->id}", DEBUG_DEVELOPER);
+                return false;
+            }
             return $rv->$name;
         }
         return $rv;

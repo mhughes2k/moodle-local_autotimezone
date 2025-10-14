@@ -19,7 +19,7 @@
  * This basically adds a "badge" element when the course is known be delivered in a different time zone from the
  * server timezone.
  *
- * @module     local_strath/dateselector-tz
+ * @module     local_autotimezone/dateselector-tz
  * @copyright  2025 University of Strathclyde
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -57,30 +57,50 @@ export const init = async (tone,
         return;
     }
 
+    // Find all date/time selector fieldsets
+    const dateTimeSelectors = $('fieldset[data-fieldtype="date_time"]');
+    // Also handle date selectors (not just date_time)
+    const dateSelectors = $('fieldset[data-fieldtype="date"]');
+
+    // We don't need to do anything if there are no selectors on the page.
+    if (dateTimeSelectors.length === 0 && dateSelectors.length === 0) {
+        log.debug('No date/time selectors found on page');
+        return;
+    }
+
     log.debug(`Course timezone is ${courseTimezone}`);
 
-    const strings = await get_strings([
-        { key: 'coursetimezoneis', component: 'local_strath', param: {
+    const strrequests = [
+        { key: 'coursetimezoneis', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'timezonewarning', component: 'local_strath', param: {
+        { key: 'timezonewarning', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'usermoduletimezonemismatch', component: 'local_strath', param: {
+        { key: 'usermoduletimezonemismatch', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'servermoduletimezonemismatch', component: 'local_strath', param: {
+        { key: 'servermoduletimezonemismatch', component: 'local_autotimezone', param: {
+            'usertz': userTimezone,
+            'coursetz': courseTimezone,
+            'servertz': serverTimezone
+        }},
+        { key: 'youaresettingtimezone', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }}
-    ]);
+    ];
+    log.debug(strrequests);
+    const strings = await get_strings(
+        strrequests
+    );
     log.debug(strings);
     const message = strings[0];
     const serverMessage = isDifferentServerTimezone
@@ -89,19 +109,15 @@ export const init = async (tone,
     const userMessage = isDifferentUserTimezone
         ? strings[2]
         : '';
-    // Find all date/time selector fieldsets
-    const dateTimeSelectors = $('fieldset[data-fieldtype="date_time"]');
-    // Also handle date selectors (not just date_time)
-    const dateSelectors = $('fieldset[data-fieldtype="date"]');
-
+    const settingInMessage = strings[4];
     const context = {
         'courseTimezone': courseTimezone,
         'tone': tone,
-        'message': message  + userMessage + serverMessage,
+        'message': settingInMessage + message  + userMessage + serverMessage,
         'attributes': [
             {"name": "src", "value":""},
             {"name": "extracclasses", "value":""},
-            {"name": "alt", "value": message  + userMessage + serverMessage}
+            {"name": "alt", "value": settingInMessage + message  + userMessage + serverMessage}
         ]
     };
     Templates.renderForPromise('local_autotimezone/timezonebadge', context)

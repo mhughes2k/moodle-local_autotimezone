@@ -40,12 +40,13 @@ if ($CFG->branch > 404) {
     ];
 } else {
     $callbacks = [
-        [
+        [   // This enables the automatic timezone switching.
             'hook' => \core\hook\after_config::class,
             'callback' => "\local_autotimezone\local\hook_callbacks::after_config",
             'priority' => 500,
         ],
         [
+            // This enables the enhancements to the date-time selector.
             'hook' => core\hook\output\after_standard_main_region_html_generation::class,
             'callback' => "\local_autotimezone\local\hook_callbacks::load_datetime_tz_extension",
             'priority' => 500,

@@ -50,7 +50,12 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
     global $OUTPUT;
     $enabled = get_config('local_autotimezone', 'enabled');
     $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), $user, false);
-    if (!$enabled || ! $allowedtouse) {
+    if (!$enabled) {
+        echo "can't use";
+        return;
+    }
+    if (! $allowedtouse) {
+        echo "no permission";
         return;
     }
     $category = new category(
@@ -60,15 +65,19 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
     );
 
     $tree->add_category($category);
-    $enabled = get_user_preferences('local_autotimezone_enabled', false);
-    if ($enabled) {
+    $userenabled = get_user_preferences('local_autotimezone_enabled', false);
+    $content = '';
+
+    if ($userenabled) {
         $url = new \moodle_url('/local/autotimezone/toggle.php', ['enable' => 0]);
         $button = new \single_button($url, get_string('disable', 'local_autotimezone'), 'post');
-        $content = $OUTPUT->render($button);
+        // Display next check info.
+        $content .= $OUTPUT->render($button);
     } else {
         $url = new \moodle_url('/local/autotimezone/toggle.php', ['enable' => 1]);
         $button = new \single_button($url, get_string('enable', 'local_autotimezone'), 'post');
-        $content = $OUTPUT->render($button);
+        $content .= $OUTPUT->render($button);
+
     }
     $tree->add_node(new node(
         'local_autotimezone',
@@ -78,12 +87,26 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
         null,
         $content
     ));
-
-    $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
-    $content = $nextcheck
+    
+    if ($userenabled) {
+        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
+        $content = $nextcheck
         ? get_string('deferswitchcheckuntil', 'local_autotimezone', userdate($nextcheck))
         : "";
-    if ($nextcheck) { // Check is deferred.
+        // Managing pausing and frequency only makes sense if enabled.
+        if ($nextcheck) { // Check is deferred.
+            $url = new \moodle_url('/local/autotimezone/toggle.php', ['enable' => 2]);
+            $button = new \single_button($url, get_string('resumechecking', 'local_autotimezone'), 'post');
+            $content .= \html_writer::tag('div', $OUTPUT->render($button));
+        } else {
+            // Pause 
+            $delay = get_config('local_autotimezone', 'delay');
+            // TODO Convert delay in to human readable format.
+
+            $url = new \moodle_url('/local/autotimezone/toggle.php', ['enable' => 3]);
+            $button = new \single_button($url, get_string('pausechecking', 'local_autotimezone', $delay), 'post');
+            $content .= \html_writer::tag('div', $OUTPUT->render($button));
+        }
         $tree->add_node(new node(
             'local_autotimezone',
             'deferrcheckuntil',
@@ -93,6 +116,7 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
             $content
         ));
     }
+    
 }
 
 /**
