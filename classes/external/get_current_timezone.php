@@ -99,6 +99,9 @@ class get_current_timezone extends \core_external\external_api {
         $response = \download_file_content($request, null, null, false, false, true);
         $json = json_decode($response);
 
+        if (is_null($json->zoneName)) {
+            throw new \moodle_exception('unabletodeterminetimezonefromlocation', 'local_autotimezone');
+        }
         if ($usertz != $json->zoneName) {
             // We have a mismatch between the user's profile timezone and their browser's location timezone.
             return (object) [
