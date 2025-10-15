@@ -27,7 +27,7 @@
 import $ from 'jquery';
 import log from 'core/loglevel';
 import Templates from 'core/templates';
-import { get_strings } from "core/str";
+import {get_strings} from "core/str";
 
 /**
  * Initialize the timezone awareness indicator.
@@ -43,7 +43,7 @@ import { get_strings } from "core/str";
  * @param {boolean} isDifferentUserTimezone
  * @returns {Promise<void>}
  */
-export const init = async (tone,
+export const init = async(tone,
                            isDifferentTimezone,
                            courseTimezone,
                            userTimezone,
@@ -71,27 +71,27 @@ export const init = async (tone,
     log.debug(`Course timezone is ${courseTimezone}`);
 
     const strrequests = [
-        { key: 'coursetimezoneis', component: 'local_autotimezone', param: {
+        {key: 'coursetimezoneis', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'timezonewarning', component: 'local_autotimezone', param: {
+        {key: 'timezonewarning', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'usermoduletimezonemismatch', component: 'local_autotimezone', param: {
+        {key: 'usermoduletimezonemismatch', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'servermoduletimezonemismatch', component: 'local_autotimezone', param: {
+        {key: 'servermoduletimezonemismatch', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
         }},
-        { key: 'youaresettingtimezone', component: 'local_autotimezone', param: {
+        {key: 'youaresettingtimezone', component: 'local_autotimezone', param: {
             'usertz': userTimezone,
             'coursetz': courseTimezone,
             'servertz': serverTimezone
@@ -113,11 +113,11 @@ export const init = async (tone,
     const context = {
         'courseTimezone': courseTimezone,
         'tone': tone,
-        'message': settingInMessage + message  + userMessage + serverMessage,
+        'message': settingInMessage + message + userMessage + serverMessage,
         'attributes': [
-            {"name": "src", "value":""},
-            {"name": "extracclasses", "value":""},
-            {"name": "alt", "value": settingInMessage + message  + userMessage + serverMessage}
+            {"name": "src", "value": ""},
+            {"name": "extracclasses", "value": ""},
+            {"name": "alt", "value": settingInMessage + message + userMessage + serverMessage}
         ]
     };
     Templates.renderForPromise('local_autotimezone/timezonebadge', context)
@@ -134,14 +134,10 @@ export const init = async (tone,
                 const selector = fieldset.find('.fdate_time_selector');
                 Templates.appendNodeContents(selector, html, js);
             });
+            return true;
         })
         .catch((error) => {
             log.error(error);
         })
     ;
-
-
-
-
-
 };
