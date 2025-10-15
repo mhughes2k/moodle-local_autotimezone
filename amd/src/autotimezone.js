@@ -25,11 +25,13 @@ var STRING = null;
 var CONFIG = null;
 /**
  * Automatic Time Zone Switcher.
- * @param {string} currentTimeZone The user's current timezone identifier.
+ * @param {string} userTimeZone The user's profile timezone identifier.
+ * @param {string} courseTimeZone The course's timezone identifier. Might be empty.
  * @param {int} delay Number of seconds to delay checks by.
  */
 export const init = async(
-    currentTimeZone,
+    userTimeZone,
+    courseTimeZone,
     delay
 ) => {
     const RESULT_MATCH = "match";
@@ -44,7 +46,8 @@ export const init = async(
     STRING = new Map(STRINGS.map((key, index) => ([key, stringValues[index]])));
     Log.debug(STRING);
 
-    Log.info(currentTimeZone);
+    Log.info(userTimeZone);
+    Log.info(courseTimeZone);
     // We need access to the geolocation API.
     if (!navigator.geolocation) {
         Log.warn("No geolocation API available");
@@ -56,6 +59,8 @@ export const init = async(
     // If the user's current location is not within the current time zone, we will switch it.
     let watchid = navigator.geolocation.watchPosition(
         (pos) => {
+            Log.info("Current User time zone: " + userTimeZone);
+            Log.info("Course time zone: " + courseTimeZone);
             Log.info("Got position: " + pos.coords.latitude + ", " + pos.coords.longitude);
             // Determine if current pos.coords is within the current time zone using api.timezonedb.com
             checkTimezone(pos.coords.latitude, pos.coords.longitude)
@@ -72,36 +77,11 @@ export const init = async(
                         data.profiletimezone,
                         data.timezone
                     );
-                    //     // Moodle CI complains about not nesting promises here, but it's not really.
-                    //     // the callbacks are passed to the modal.
-                    //     () => {
-                    //         Log.info("Updating time zone to " + data.timezone);
-                    //         updateTimeZone(data.timezone).then(() => {
-                    //             window.location.reload();
-                    //             return true;
-                    //         })
-                    //         .fail(() => {
-                    //             Log.error("Failed to update time zone");
-                    //             return false;
-                    //         });
-                    //
-                    //     },
-                    //
-                    //     () => {
-                    //         // Set user preference to not trigger checking for at least 24 hrs.
-                    //         const delayms = CONFIG.delay * 1000;
-                    //         const now = new Date();
-                    //         const nextCheck = new Date();
-                    //         nextCheck.setTime(now.getTime() + delayms);
-                    //         Log.info("Stopping location changes for " + CONFIG.delay + " hrs " + nextCheck.toISOString());
-                    //         deferChecks(nextCheck.getTime() / 1000);// Convert to unixtimestamp in seconds.
-                    //     }
-                    // );
                 }
                 navigator.geolocation.clearWatch(watchid);
                 return true;
             })
-            .fail((error) => {
+            .catch((error) => {
                 if (error.errorcode == "unabletodeterminetimezonefromlocation") {
                     navigator.geolocation.clearWatch(watchid);
                     // Something's wrong with the backend / we couldn't look up the locaiton.
@@ -164,14 +144,15 @@ export const updateIgnore = async(profileTz, currentTz) => {
 
     modal.getRoot().on(ModalEvents.save, () => {
         Log.info("Updating time zone to " + currentTz);
-        updateTimeZone(currentTz).then(() => {
+        updateTimeZone(currentTz)
+        .then(() => {
             window.location.reload();
             return true;
         })
-            .fail(() => {
-                Log.error("Failed to update time zone");
-                return false;
-            });
+        .catch(() => {
+            Log.error("Failed to update time zone");
+            return false;
+        });
     });
 
     modal.getRoot().on(ModalEvents.cancel, () => {

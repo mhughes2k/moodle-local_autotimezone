@@ -33,7 +33,7 @@ if ($CFG->branch > 404) {
             'priority' => 500,
         ],
         [
-            'hook' => core\hook\output\after_standard_main_region_html_generation::class,
+            'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension'],
             'priority' => 500,
         ],
@@ -47,7 +47,7 @@ if ($CFG->branch > 404) {
         ],
         [
             // This enables the enhancements to the date-time selector.
-            'hook' => core\hook\output\after_standard_main_region_html_generation::class,
+            'hook' => core\hook\output\before_standard_top_of_body_html_generation::class,
             'callback' => "\local_autotimezone\local\hook_callbacks::load_datetime_tz_extension",
             'priority' => 500,
         ],

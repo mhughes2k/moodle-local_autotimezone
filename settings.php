@@ -44,6 +44,19 @@ if ($hassiteconfig) {
             get_string('enabledatetimeenhancementsenabled_desc', 'local_autotimezone'),
             0
         ));
+        $settings->add(new admin_setting_configcheckbox(
+            'local_autotimezone/coursenotificationenabled',
+            get_string('coursenotification', 'local_autotimezone'),
+            get_string('coursenotification_desc', 'local_autotimezone'),
+            0
+        ));
+        $settings->add(new admin_setting_configcheckbox(
+            'local_autotimezone/shownotificationforcourseserverconflict',
+            get_string('shownotificationforcourseserverconflict', 'local_autotimezone'),
+            get_string('shownotificationforcourseserverconflict_desc', 'local_autotimezone'),
+            0
+        ));
+        
 
         $handler = \core_customfield\handler::get_handler('core_course', 'course');
         $fields = $handler->get_fields();

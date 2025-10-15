@@ -19,6 +19,9 @@ namespace local_autotimezone\external;
 defined('MOODLE_INTERNAL') || die;
 
 use core_external\external_value;
+use core_external\external_function_parameters;
+use \core\user;
+
 require_once($CFG->dirroot . '/user/lib.php');
 
 /**
@@ -55,7 +58,7 @@ class update_timezone extends \core_external\external_api {
         global $USER;
 
         $params = self::validate_parameters(self::execute_parameters(), ['timezone' => $timezone]);
-        $user = \core_user::get_user($USER->id);    // We can only update the calling user.
+        $user = user::get_user($USER->id);    // We can only update the calling user.
         $user->timezone = $params['timezone'];
 
         user_update_user($user, false); // Don't update the password.

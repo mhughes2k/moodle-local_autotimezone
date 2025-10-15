@@ -115,7 +115,8 @@ class hook_callbacks {
         // TODO Restrict to only running on "user" space pages, not admin ones?
 
         $user = core_user::get_user($USER->id);
-        $tz = core_date::get_user_timezone($user);
+        $usertz = core_date::get_user_timezone($user);
+        $coursetz = null;
         if (!is_null($COURSE)) {
             $coursetz  = self::get_custom_field_data($COURSE, self::$timezonecustomfieldname);
         }
@@ -127,7 +128,8 @@ class hook_callbacks {
         if ($userenabled) {
             if ($shouldruncheck) {
                 $PAGE->requires->js_call_amd('local_autotimezone/autotimezone', 'init', [
-                    $tz,
+                    $usertz,
+                    $coursetz,
                     $delay,
                 ]);
             }
@@ -137,11 +139,14 @@ class hook_callbacks {
 
     /**
      * Load timezone extension for date-time selectors.
-     * @param after_standard_main_region_html_generation $hook
+     * 
+     * Current set up is that you need to have the enhancements enabled and you always get the date-time garnishes.
+     * Once turned on getting the course notification of a mismatch between the user and the course is an option.
+     * @param \core\hook\output\before_standard_top_of_body_html_generation $hook
      * @return void
      */
-    public static function load_datetime_tz_extension(after_standard_main_region_html_generation $hook) :void {
-        global $USER;
+    public static function load_datetime_tz_extension(\core\hook\output\before_standard_top_of_body_html_generation $hook) :void {
+        global $USER, $OUTPUT;
         // Check enablement first.
         $enabled = get_config('local_autotimezone', 'datetimeenhancementsenabled');
         if (!$enabled) {
@@ -164,7 +169,34 @@ class hook_callbacks {
         // This will return false if not configured correctly.
         if ($courseTimeZone = self::get_custom_field_data($course, self::$timezonecustomfieldname)) {
             $timezoneAnalysis = self::analyze_timezone_conflicts($courseTimeZone);
+            // Add notification to user if there is a conflict.
+            $tza =(object)[
+                'usertz' => $timezoneAnalysis['usertz'],
+                'coursetz' => $timezoneAnalysis['courseTimeZone'],
+                'servertz' => $timezoneAnalysis['servertz'],
+            ];
 
+            $coursenotificationenabled = get_config('local_autotimezone', 'coursenotificationenabled');
+            $shownotificationforcourseserverconflict = get_config('local_autotimezone', 'shownotificationforcourseserverconflict');
+            if ($coursenotificationenabled) {
+                if ($timezoneAnalysis['isDifferentTimezone']) {
+                    $what = false;
+                    if ($timezoneAnalysis['isDifferentUserTimezone']) {
+                        $what = 'usermoduletimezonemismatch';
+                    } else if ($shownotificationforcourseserverconflict && $timezoneAnalysis['isDifferentServerTimezone']) {
+                        $what = 'servermoduletimezonemismatch';
+                    } 
+                    if ($what ?? false) {
+                        $helpicon = new \core\output\help_icon('timezoneconflicthelp', 'local_autotimezone', $tza);
+                        \core\notification::add(
+                            get_string($what, 'local_autotimezone', $tza) .
+                            $OUTPUT->render($helpicon),
+                            \core\output\notification::NOTIFY_WARNING
+                        );
+                    }
+                }
+            }
+            // Load the AMD module to enhance date-time selectors.
             $hook->renderer->get_page()->requires->js_call_amd(
                 'local_autotimezone/dateselector-tz',
                 'init',

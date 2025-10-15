@@ -36,6 +36,11 @@ A commercial API key is necessary to use this service.';
 $string['checkdeferred'] = 'Automatic Time Zone switching paused';
 $string['configcheck'] = 'Configuration Check';
 $string['configok'] = 'Basic Configuration OK';
+$string['coursenotification'] = 'Display in-course notification';
+$string['coursenotification_desc'] = "Display a notification on course pages if user's timezone doesn't match the course's timezone.
+
+Requires `Date-Time selector enhancements` to be enabled.";
+$string['coursenotification_link'] = 'https://mhughes2k.github.io/moodle-local_autotimezone/help/coursenotification';
 $string['coursetimezonefield'] = 'Course timezone field';
 $string['coursetimezonefield_desc'] = "Select the course custom field that holds the timezone value for the course's location.";
 $string['coursetimezoneis'] = 'Course timezone is {$a->coursetz}.';
@@ -57,6 +62,16 @@ $string['pluginname'] = 'Automatic Time Zone Switcher';
 $string['privacy:metadata'] = 'The Automatic Time Zone Switcher plugin access Browser Geolocation Sensor data & existing User Profile Timezone data, it does not store any personal data.';
 $string['resumechecking'] = 'Resume Checks';
 $string['servermoduletimezonemismatch'] = "Module timezone ({\$a->coursetz}) is different to server's timezone ({\$a->servertz}).";
+$string['shownotificationforcourseserverconflict'] = 'Show Course - Server time zone mismatch';
+$string['shownotificationforcourseserverconflict_desc'] = "Show notification if course timezone and server timezone don't match.
+
+Requires `Display in-course notification` to be enabled.";
+$string['timezoneconflicthelp'] = 'Time Zone Conflict';
+$string['timezoneconflicthelp_help'] = "Your time zone is different from the either the server or the course.
+
+All times are displayed according to your profile's timezone, and when you enter a date/time you are entering it according to your profile's timezone.
+
+This can lead to mis-match if your time zone is set to \"Europe/London\", but the course (and the users on it) are anticipating \"Asia/Bahrain\".";
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
 $string['timezonewarning'] = 'Timezonewarning';
