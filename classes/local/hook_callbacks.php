@@ -100,7 +100,7 @@ class hook_callbacks {
         if (during_initial_install()) {
             return;
         }
-        
+
         // This doesn't work if we're not logged in.
         if (isguestuser() || !isloggedin()) {
             return;
@@ -163,25 +163,8 @@ class hook_callbacks {
         $course = get_course($context->instanceid);
         // This will return false if not configured correctly.
         if ($courseTimeZone = self::get_custom_field_data($course, self::$timezonecustomfieldname)) {
-            // Note, these are the timezones, not the values.
-            $usertz = core_date::get_user_timezone();
-            $servertz = core_date::get_server_timezone();
-
-            $isDifferentTimezone = false;
-            $isDifferentServerTimezone = false;
-            $servertimezone = get_config('core', 'timezone');
-            if ($courseTimeZone === "") {
-                $courseTimeZone = $servertimezone;  // Course defaults to server time zone.
-            }
-            $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
-
-            $isDifferentUserTimezone = $usertz !== $courseTimeZone;
-            $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
-            $tone = 'red';  // TODO this should be a style rule.
-            if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
-                // User's prefs match the course.
-                $tone = 'green';
-            }
+            // Analyze timezone conflicts
+            $timezoneAnalysis = self::analyze_timezone_conflicts($courseTimeZone);
 
             // echo(\html_writer::tag('pre',
             //     "Course timezone is \"$courseTimeZone\"\n user timezone is \"$usertz\"\n \$USER->timezone is {$USER->timezone}\n server timezone is \"$servertz\"" .
@@ -195,19 +178,113 @@ class hook_callbacks {
                 'local_autotimezone/dateselector-tz',
                 'init',
                 [
-                    $tone,
-                    $isDifferentTimezone,
-                    $courseTimeZone,
-                    $usertz,
-                    $servertz,
-                    $isDifferentServerTimezone,
-                    $isDifferentUserTimezone
+                    $timezoneAnalysis['tone'],
+                    $timezoneAnalysis['isDifferentTimezone'],
+                    $timezoneAnalysis['courseTimeZone'],
+                    $timezoneAnalysis['usertz'],
+                    $timezoneAnalysis['servertz'],
+                    $timezoneAnalysis['isDifferentServerTimezone'],
+                    $timezoneAnalysis['isDifferentUserTimezone']
                 ]
             );
         } else {
             debugging('Not loading course timezone as not configured correctly', DEBUG_DEVELOPER);
         }
     }
+
+    /**
+     * Analyze timezone conflicts between course, user, and server timezones.
+     * 
+     * @param string $courseTimeZone The course timezone
+     * @return array Array containing timezone analysis data
+     */
+    public static function analyze_timezone_conflicts(?string $courseTimeZone): array {
+        $usertz = core_date::get_user_timezone();
+        $servertz = core_date::get_server_timezone();
+        $servertimezone = get_config('core', 'timezone');
+        
+        // Course defaults to server time zone if empty
+        if (empty($courseTimeZone)) {
+            $courseTimeZone = $servertimezone;
+        }
+        
+        $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
+        $isDifferentUserTimezone = $usertz !== $courseTimeZone;
+        $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
+        
+        // Determine visual indicator tone
+        $tone = 'red';  // Default to indicating conflict
+        if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
+            // User's prefs match the course, even if different from server
+            $tone = 'green';
+        }
+        
+        return [
+            'courseTimeZone' => $courseTimeZone,
+            'usertz' => $usertz,
+            'servertz' => $servertz,
+            'servertimezone' => $servertimezone,
+            'isDifferentTimezone' => $isDifferentTimezone,
+            'isDifferentServerTimezone' => $isDifferentServerTimezone,
+            'isDifferentUserTimezone' => $isDifferentUserTimezone,
+            'tone' => $tone
+        ];
+    }
+
+    static function extend_user_menu(\core_user\hook\extend_user_menu $hook): void {
+        global $COURSE;
+        if ($courseTimeZone = self::get_custom_field_data($COURSE, self::$timezonecustomfieldname)) {
+            // Analyze timezone conflicts
+            $timezoneAnalysis = self::analyze_timezone_conflicts($courseTimeZone);
+            // Create a new menu item
+            $menuitem = new \stdClass();
+            $menuitem->itemtype = 'submenu-link';
+            // $menuitem->url = new \moodle_url('/local/autotimezone/index.php');
+            $menuitem->title = get_string('timezones', 'local_autotimezone');
+            // $menuitem->titleidentifier = 'timezones,local_autotimezone';
+            $menuitem->pixicon = $timezoneAnalysis['isDifferentTimezone'] ? 'i/risk_xss': 'i/siteevent';
+            $menuitem->submenulink = true;
+            $menuitem->submenuid = "local_autotimezone_selector";
+            $hook->add_navitem($menuitem);
+
+            $tzmenuitems = [];
+            $str = get_string('yourtimezone', 'local_autotimezone', (object)['usertz' => $timezoneAnalysis['usertz']]);
+            $tzmenuitems[] = (object) [
+                'type' => 'link',
+                'text' => $str,
+                'title' => $str,
+                'link' => new \moodle_url('/user/profile/php'),
+                'icon' => $timezoneAnalysis['isDifferentTimezone'] ? 'i/risk_xss': ''
+            ];
+            if (empty($COURSE) || $COURSE->id !== SITEID) {
+                $str = get_string('coursetimezone', 'local_autotimezone', (object)['coursetz' => $timezoneAnalysis['courseTimeZone']]);
+                $tzmenuitems[] = (object) [
+                    'type' => 'link',
+                    'text' => $str,
+                    'title' => $str,
+                    'link' => new \moodle_url('/course/view.php', ['id' => $COURSE->id]),
+                    'icon' => $timezoneAnalysis['isDifferentTimezone'] ? 'i/risk_xss' : ''
+                ];
+            }
+            $str = get_string('servertimezone', 'local_autotimezone', (object)['servertz' => $timezoneAnalysis['servertz']]);
+            $tzmenuitems[] = (object) [
+                'type' => 'link',
+                'text' => $str,
+                'title' => $str,
+                'link' => new \moodle_url('/user/profile/php'),
+                'icon' => $timezoneAnalysis['isDifferentServerTimezone'] ? 'i/risk_xss' : ''
+            ];
+            $menu = (object) [
+                'id' => "local_autotimezone_selector",
+                'title' => "Timezones",
+                'items' => $tzmenuitems
+            ];
+            
+            $hook->add_submenu($menu);
+        }
+
+    }
+
 
     static $coursetimezone_cache = [];
     /**

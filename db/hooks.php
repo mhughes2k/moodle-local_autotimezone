@@ -37,6 +37,12 @@ if ($CFG->branch > 404) {
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension'],
             'priority' => 500,
         ],
+        [
+            'hook' => \core_user\hook\extend_user_menu::class,
+            'callback' => [\local_autotimezone\local\hook_callbacks::class, 'extend_user_menu'],
+            'priority' => 500,
+        ]
+
     ];
 } else {
     $callbacks = [
