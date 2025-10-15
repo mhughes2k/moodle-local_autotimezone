@@ -37,9 +37,7 @@ $string['checkdeferred'] = 'Automatic Time Zone switching paused';
 $string['configcheck'] = 'Configuration Check';
 $string['configok'] = 'Basic Configuration OK';
 $string['coursenotification'] = 'Display in-course notification';
-$string['coursenotification_desc'] = "Display a notification on course pages if user's timezone doesn't match the course's timezone.
-
-Requires `Date-Time selector enhancements` to be enabled.";
+$string['coursenotification_desc'] = "Display a notification on course pages if user's timezone doesn't match the course's timezone.";
 $string['coursenotification_link'] = 'https://mhughes2k.github.io/moodle-local_autotimezone/help/coursenotification';
 $string['coursetimezonefield'] = 'Course timezone field';
 $string['coursetimezonefield_desc'] = "Select the course custom field that holds the timezone value for the course's location.";
