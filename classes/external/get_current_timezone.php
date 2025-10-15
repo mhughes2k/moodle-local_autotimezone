@@ -93,14 +93,28 @@ class get_current_timezone extends \core_external\external_api {
     protected static function backend_timezonedb(string $usertz, array $params): object {
         $apikey = get_config('local_autotimezone', 'timezonedbapikey');
 
-        $request = "http://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&";
+        $request = "https://api.timezonedb.com/v2.1/get-time-zone?key={$apikey}&format=json&by=position&";
         $request .= "lat={$params['latitude']}&lng={$params['longitude']}";
 
-        $response = \download_file_content($request, null, null, false, false, true);
-        $json = json_decode($response);
-
+        $response = \download_file_content($request, null, null, true, false, true);
+        if ($response->status != 200) {
+            throw new \core\exception\moodle_exception(
+                'unabletodeterminetimezonefromlocation',
+                'local_autotimezone',
+                '',
+                null,
+                debugging('', DEBUG_DEVELOPER) ? $response->error : null
+            );
+        }
+        $json = json_decode($response->results);
         if (is_null($json->zoneName)) {
-            throw new \moodle_exception('unabletodeterminetimezonefromlocation', 'local_autotimezone');
+            throw new \core\exception\moodle_exception(
+                'unabletodeterminetimezonefromlocation',
+                'local_autotimezone',
+                '',
+                null,
+                $response
+            );
         }
         if ($usertz != $json->zoneName) {
             // We have a mismatch between the user's profile timezone and their browser's location timezone.

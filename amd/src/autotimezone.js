@@ -103,8 +103,10 @@ export const init = async(
             })
             .fail((error) => {
                 if (error.errorcode == "unabletodeterminetimezonefromlocation") {
+                    navigator.geolocation.clearWatch(watchid);
                     // Something's wrong with the backend / we couldn't look up the locaiton.
                     Log.debug("Unable to determine timezone from location");
+                    Log.debug(error);
                     return false;
                 }
                 Log.error(error);

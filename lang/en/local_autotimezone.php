@@ -60,6 +60,7 @@ $string['servermoduletimezonemismatch'] = "Module timezone ({\$a->coursetz}) is 
 $string['timezonedbapikey'] = 'Timezone DB API Key';
 $string['timezonedbapikey_desc'] = 'Timezone DB API Key';
 $string['timezonewarning'] = 'Timezonewarning';
+$string['unabletodeterminetimezonefromlocation'] = 'Unable to determine timezone from location.';
 $string['updatemodalbody'] = '<p>Your current location <strong>{$a->currentTz}</strong> does not match your profile\'s time zone <strong>{$a->profileTz}</strong>.</p>';
 $string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalupdatebutton'] = 'Update Timezone';

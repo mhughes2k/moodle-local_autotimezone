@@ -163,50 +163,63 @@ class hook_callbacks {
         $course = get_course($context->instanceid);
         // This will return false if not configured correctly.
         if ($courseTimeZone = self::get_custom_field_data($course, self::$timezonecustomfieldname)) {
-            // Note, these are the timezones, not the values.
-            $usertz = core_date::get_user_timezone();
-            $servertz = core_date::get_server_timezone();
-
-            $isDifferentTimezone = false;
-            $isDifferentServerTimezone = false;
-            $servertimezone = get_config('core', 'timezone');
-            if ($courseTimeZone === "") {
-                $courseTimeZone = $servertimezone;  // Course defaults to server time zone.
-            }
-            $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
-
-            $isDifferentUserTimezone = $usertz !== $courseTimeZone;
-            $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
-            $tone = 'red';  // TODO this should be a style rule.
-            if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
-                // User's prefs match the course.
-                $tone = 'green';
-            }
-
-            // echo(\html_writer::tag('pre',
-            //     "Course timezone is \"$courseTimeZone\"\n user timezone is \"$usertz\"\n \$USER->timezone is {$USER->timezone}\n server timezone is \"$servertz\"" .
-            //     "\n usertz: {$usertz}\n servertz: {$servertz}\n servertimezone: {$servertimezone}" .
-            //     "\n isDifferentUserTimezone = " . ($isDifferentUserTimezone ? 'true' : 'false').
-            //     "\n isDifferentServerTimezone = " . ($isDifferentServerTimezone ? 'true' : 'false') .
-            //     "\n isDifferentTimezone = " . ($isDifferentTimezone ? 'true' : 'false') 
-            // ));
+            $timezoneAnalysis = self::analyze_timezone_conflicts($courseTimeZone);
 
             $hook->renderer->get_page()->requires->js_call_amd(
                 'local_autotimezone/dateselector-tz',
                 'init',
                 [
-                    $tone,
-                    $isDifferentTimezone,
-                    $courseTimeZone,
-                    $usertz,
-                    $servertz,
-                    $isDifferentServerTimezone,
-                    $isDifferentUserTimezone
+                    $timezoneAnalysis['tone'],
+                    $timezoneAnalysis['isDifferentTimezone'],
+                    $timezoneAnalysis['courseTimeZone'],
+                    $timezoneAnalysis['usertz'],
+                    $timezoneAnalysis['servertz'],
+                    $timezoneAnalysis['isDifferentServerTimezone'],
+                    $timezoneAnalysis['isDifferentUserTimezone']
                 ]
             );
         } else {
             debugging('Not loading course timezone as not configured correctly', DEBUG_DEVELOPER);
         }
+    }
+
+    /**
+     * Analyze timezone conflicts between course, user, and server timezones.
+     * 
+     * @param string $courseTimeZone The course timezone
+     * @return array Array containing timezone analysis data
+     */
+    public static function analyze_timezone_conflicts($courseTimeZone): array {
+        $usertz = core_date::get_user_timezone();
+        $servertz = core_date::get_server_timezone();
+        $servertimezone = get_config('core', 'timezone');
+        
+        // Course defaults to server time zone if empty
+        if ($courseTimeZone === "") {
+            $courseTimeZone = $servertimezone;
+        }
+        
+        $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
+        $isDifferentUserTimezone = $usertz !== $courseTimeZone;
+        $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
+        
+        // Determine visual indicator tone
+        $tone = 'red';  // Default to indicating conflict
+        if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
+            // User's prefs match the course, even if different from server
+            $tone = 'green';
+        }
+        
+        return [
+            'courseTimeZone' => $courseTimeZone,
+            'usertz' => $usertz,
+            'servertz' => $servertz,
+            'servertimezone' => $servertimezone,
+            'isDifferentTimezone' => $isDifferentTimezone,
+            'isDifferentServerTimezone' => $isDifferentServerTimezone,
+            'isDifferentUserTimezone' => $isDifferentUserTimezone,
+            'tone' => $tone
+        ];
     }
 
     static $coursetimezone_cache = [];
