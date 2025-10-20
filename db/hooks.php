@@ -29,16 +29,19 @@ global $CFG;
 
 if ($CFG->branch > 404) {
     $callbacks = [
+        // This loads the User location checking against profile timezone and course timezone.
         [
             'hook' => \core\hook\after_config::class,
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'after_config'],
             'priority' => 500,
         ],
+        // This loads the enhancements to the date-time selector.
         [
             'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension'],
             'priority' => 500,
         ],
+        // This loads in UI elements that notify user of timezone conflicts in user menu.
         [
             'hook' => extend_user_menu::class,
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension_usermenu'],
