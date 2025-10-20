@@ -21,7 +21,7 @@
 
     Example context (json):
     {
-        nextcheck: 12345678901
+        "nextcheck": 12345678901
     }
 }}
 <div>{{#str}} nextcheck, local_autotimezone {{/str}} {{#nextcheck}}{{#userdate}} {{.}} , {{#str}} strftimedate, core_langconfig {{/str}}{{/userdate}}{{/nextcheck}}{{^nextcheck}}-{{/nextcheck}}</div>

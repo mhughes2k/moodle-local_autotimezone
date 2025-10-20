@@ -55,8 +55,8 @@ class hook_callbacks {
     /**
      * @var bool Cache of whether the configuration is valid and the tool is usable.
      */
-    static $isavailable = null;
-    
+    protected static $isavailable = null;
+
     /**
      * Check that the plugin is correctly configured.
      * Returns true if config is OK, false otherwise.
@@ -186,7 +186,9 @@ class hook_callbacks {
             );
         }
     }
-
+    /**
+     * Load the timezone extension for the user menu.
+     */
     public static function load_datetime_tz_extension_usermenu(core_user\hook\extend_user_menu $hook): void {
         self::check_config();
         if ($timezoneanalysis = self::load_datetime_tz_extension_core($hook)) {
@@ -267,7 +269,10 @@ class hook_callbacks {
                     $what = false;
                     if ($timezoneanalysis['isdifferentusertimezone']) {
                         $what = 'usermoduletimezonemismatch';
-                    } else if ($shownotificationforcourseserverconflict && $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone']) {
+                    } else if (
+                        $shownotificationforcourseserverconflict && 
+                        $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone']
+                    ) {
                         $what = 'servermoduletimezonemismatch';
                     }
                     if ($what ?? false) {
@@ -290,7 +295,7 @@ class hook_callbacks {
 
     /**
      * Analyze timezone conflicts between course, user, and server timezones.
-     * 
+     *
      * @param string $coursetimezone The course timezone
      * @return array Array containing timezone analysis data
      */
@@ -298,23 +303,23 @@ class hook_callbacks {
         $usertz = core_date::get_user_timezone();
         $servertz = core_date::get_server_timezone();
         $servertimezone = get_config('core', 'timezone');
-        
-        // Course defaults to server time zone if empty
+
+        // Course defaults to server time zone if empty.
         if ($coursetimezone === "") {
             $coursetimezone = $servertimezone;
         }
-        
+
         $isdifferentservertimezone = $coursetimezone !== $servertimezone;
         $isdifferentusertimezone = $usertz !== $coursetimezone;
         $isdifferentusertimezone = $isdifferentusertimezone || $isdifferentservertimezone;
-        
-        // Determine visual indicator tone
-        $tone = 'red';  // Default to indicating conflict
+
+        // Determine visual indicator tone.
+        $tone = 'red';  // Default to indicating conflict.
         if ($isdifferentservertimezone && !$isdifferentusertimezone) {
             // User's prefs match the course, even if different from server
             $tone = 'green';
         }
-        
+
         return [
             'coursetimezone$coursetimezone' => $coursetimezone,
             'usertz' => $usertz,
@@ -330,10 +335,10 @@ class hook_callbacks {
     /**
      * @var array Cache of course timezone custom field data.
      */
-    static $coursetimezonecache = [];
+    protected static $coursetimezonecache = [];
     /**
      * Returns either a single value for a named field, or the all of the values for a course.
-     * 
+     *
      * This can be called as part of the public API.
      * @param \stdClass $course The
      * @param string|bool $name The name of the field to return, or false to return all fields.

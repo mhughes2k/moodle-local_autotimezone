@@ -85,7 +85,7 @@ class get_current_timezone extends \core_external\external_api {
      * Autotimezone.com API backend.
      * @param {string} $usertz User's timezone from profile.
      * @param {string[]} $params Web Service Parameters.
-     * @return object
+     * @return object Status object (status, message, profiletimezone, timezone).
      * @throws \dml_exception
      */
     protected static function backend_timezonedb(string $usertz, array $params): object {
@@ -136,7 +136,7 @@ class get_current_timezone extends \core_external\external_api {
      * Non-API based back end.
      * @param {string} $usertz User's timezone from profile.
      * @param {string[]} $params Web Service Parameters.
-     * @return object
+     * @return object Status object (status, message, profiletimezone, timezone)
      */
     protected static function backend_local(string $usertz, array $params): object {
         return (object) [

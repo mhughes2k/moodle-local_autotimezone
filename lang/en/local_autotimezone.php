@@ -34,10 +34,10 @@ This requires registration and an API key to be provided.
 
 A commercial API key is necessary to use this service.';
 $string['checkdeferred'] = 'Automatic Time Zone switching paused';
-$string['configcheck'] = 'Configuration Check';
-$string['configok'] = 'Basic Configuration OK';
 $string['cntype:banner'] = 'Banner at top of course page';
 $string['cntype:usermenu'] = 'Item in user menu';
+$string['configcheck'] = 'Configuration Check';
+$string['configok'] = 'Basic Configuration OK';
 $string['coursenotification'] = 'Display in-course notification';
 $string['coursenotification_desc'] = "Display a notification on course pages if user's timezone doesn't match the course's timezone.";
 $string['coursenotification_link'] = 'https://mhughes2k.github.io/moodle-local_autotimezone/help/coursenotification';
@@ -88,4 +88,3 @@ $string['usermenu:timezoneconflictindicator'] = 'Timezone Conflict';
 $string['usermoduletimezonemismatch'] = 'Your timezone ({$a->usertz}) does not match course timezone ({$a->coursetz}).';
 $string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
 $string['youaresettingtimezone'] = 'You are setting the time in "{$a->usertz}" timezone!';
-
