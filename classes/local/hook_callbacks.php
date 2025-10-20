@@ -43,7 +43,7 @@ class hook_callbacks {
      */
     protected static $tzcustomfieldid = null;
 
-    /**     
+    /**
      * @var string Timezone switcher mode.
      */
     const MODE_SWITCHER = 'switcher';
@@ -52,10 +52,10 @@ class hook_callbacks {
      */
     const MODE_DATETIMEENHANCEMENTS = 'datetimeenhancements';
 
-    /**     
+    /**
      * @var bool Cache of whether the configuration is valid and the tool is usable.
      */
-    static $isAvailable = null;
+    static $isavailable = null;
     
     /**
      * Check that the plugin is correctly configured.
@@ -67,8 +67,8 @@ class hook_callbacks {
         if (empty(self::$tzcustomfieldname)) {
             return false;
         }
-        if (!is_null(self::$isAvailable)) {
-            return self::$isAvailable;
+        if (!is_null(self::$isavailable)) {
+            return self::$isavailable;
         }
         $fieldfound = false;
         $handler = \core_customfield\handler::get_handler('core_course', 'course');
@@ -78,7 +78,7 @@ class hook_callbacks {
                 break;
             }
         }
-        self::$isAvailable = $fieldfound;
+        self::$isavailable = $fieldfound;
         return $fieldfound;
     }
 
@@ -121,14 +121,14 @@ class hook_callbacks {
         if (during_initial_install()) {
             return;
         }
-        
+
         // This doesn't work if we're not logged in.
         if (isguestuser() || !isloggedin()) {
             return;
         }
         self::check_config();
         $enabled = get_config('local_autotimezone', 'enabled');
-       
+
         $allowedtouse = has_capability('local/autotimezone:use', \core\context\system::instance(), null, false);
         if (!$enabled || !$allowedtouse) {
             return;
@@ -143,7 +143,7 @@ class hook_callbacks {
         }
 
         $userenabled = get_user_preferences('local_autotimezone_enabled', 0);
-        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);        
+        $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
         $shouldruncheck = (time() >= $nextcheck);
         $delay = get_config('local_autotimezone', 'delay');
         if ($userenabled) {
@@ -160,28 +160,28 @@ class hook_callbacks {
 
     /**
      * Load timezone extension for date-time selectors.
-     * 
+     *
      * Current set up is that you need to have the enhancements enabled and you always get the date-time garnishes.
      * Once turned on getting the course notification of a mismatch between the user and the course is an option.
      * @param \core\hook\output\before_standard_top_of_body_html_generation $hook
      * @return void
      */
-    public static function load_datetime_tz_extension(\core\hook\output\before_standard_top_of_body_html_generation $hook) :void {
+    public static function load_datetime_tz_extension(\core\hook\output\before_standard_top_of_body_html_generation $hook): void {
         self::check_config();
         $context = $hook->renderer->get_page()->context;
-        if ($timezoneAnalysis = self::load_datetime_tz_extension_core($hook, $context)) {
+        if ($timezoneanalysis = self::load_datetime_tz_extension_core($hook, $context)) {
             // Check that this is all in use, and if it is, add the adornments.
             $hook->renderer->get_page()->requires->js_call_amd(
                 'local_autotimezone/dateselector-tz',
                 'init',
                 [
-                    $timezoneAnalysis['tone'],
-                    $timezoneAnalysis['isDifferentTimezone'],
-                    $timezoneAnalysis['courseTimeZone'],
-                    $timezoneAnalysis['usertz'],
-                    $timezoneAnalysis['servertz'],
-                    $timezoneAnalysis['isDifferentServerTimezone'],
-                    $timezoneAnalysis['isDifferentUserTimezone']
+                    $timezoneanalysis['tone'],
+                    $timezoneanalysis['isdifferenttimzone$isdifferentusertimezone'],
+                    $timezoneanalysis['coursetimezone$coursetimezone'],
+                    $timezoneanalysis['usertz'],
+                    $timezoneanalysis['servertz'],
+                    $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone'],
+                    $timezoneanalysis['isdifferentusertimezone'],
                 ]
             );
         }
@@ -189,20 +189,20 @@ class hook_callbacks {
 
     public static function load_datetime_tz_extension_usermenu(core_user\hook\extend_user_menu $hook): void {
         self::check_config();
-        if ($timezoneAnalysis = self::load_datetime_tz_extension_core($hook)) {
+        if ($timezoneanalysis = self::load_datetime_tz_extension_core($hook)) {
             // Check in use, and add the user_menu display.
             // Notification should have been skipped in the core if it was turned off.
             $notificationtype = get_config('local_autotimezone', 'coursenotificationtype');
             if ($notificationtype === 'usermenu') {
                 $texttitle = get_string(
-                            'usermenu:timezoneconflictindicator',
-                            'local_autotimezone',
-                            (object)[
-                                'usertz' => $timezoneAnalysis['usertz'],
-                                'coursetz' => $timezoneAnalysis['courseTimeZone'],
-                                'servertz' => $timezoneAnalysis['servertz'],
-                            ]
-                            );
+                    'usermenu:timezoneconflictindicator',
+                    'local_autotimezone',
+                    (object)[
+                        'usertz' => $timezoneanalysis['usertz'],
+                        'coursetz' => $timezoneanalysis['coursetimezone$coursetimezone'],
+                        'servertz' => $timezoneanalysis['servertz'],
+                    ]
+                );
                 $hook->add_navitem(
                     (object)[
                         'itemtype' => 'link',
@@ -230,7 +230,7 @@ class hook_callbacks {
      * @param \context|null $context The context to use to find the course. If null, no course context is used.
      * @return array|false The timezone analysis data, or false if not available.
      */
-    protected static function load_datetime_tz_extension_core($hook, ?\context $context = null ): array | false {
+    protected static function load_datetime_tz_extension_core($hook, ?\context $context = null): array | false {
         global $OUTPUT;
         self::check_config();
         // Check enablement first.
@@ -248,28 +248,28 @@ class hook_callbacks {
         if ($context && $context->contextlevel != CONTEXT_COURSE) {
             $context = $context->get_course_context(false);
         }
-        
+
         $course = $context ? get_course($context->instanceid) : null;
         // This will return false if not configured correctly.
-        if ($course && $courseTimeZone = self::get_custom_field_data($course, self::$tzcustomfieldname)) {
-            $timezoneanalysis = self::analyze_timezone_conflicts($courseTimeZone);
+        if ($course && $coursetimezone = self::get_custom_field_data($course, self::$tzcustomfieldname)) {
+            $timezoneanalysis = self::analyze_timezone_conflicts($coursetimezone);
             // Add notification to user if there is a conflict.
-            $tza =(object)[
+            $tza = (object) [
                 'usertz' => $timezoneanalysis['usertz'],
-                'coursetz' => $timezoneanalysis['courseTimeZone'],
+                'coursetz' => $timezoneanalysis['coursetimezone$coursetimezone'],
                 'servertz' => $timezoneanalysis['servertz'],
             ];
 
             $coursenotificationenabled = get_config('local_autotimezone', 'coursenotificationenabled');
             $shownotificationforcourseserverconflict = get_config('local_autotimezone', 'shownotificationforcourseserverconflict');
             if ($coursenotificationenabled) {
-                if ($timezoneanalysis['isDifferentTimezone']) {
+                if ($timezoneanalysis['isdifferenttimzone$isdifferentusertimezone']) {
                     $what = false;
-                    if ($timezoneanalysis['isDifferentUserTimezone']) {
+                    if ($timezoneanalysis['isdifferentusertimezone']) {
                         $what = 'usermoduletimezonemismatch';
-                    } else if ($shownotificationforcourseserverconflict && $timezoneanalysis['isDifferentServerTimezone']) {
+                    } else if ($shownotificationforcourseserverconflict && $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone']) {
                         $what = 'servermoduletimezonemismatch';
-                    } 
+                    }
                     if ($what ?? false) {
                         $notificationtype = get_config('local_autotimezone', 'coursenotificationtype');
                         if ($notificationtype === 'banner') {
@@ -282,7 +282,6 @@ class hook_callbacks {
                         }
                     }
                 }
-
             }
             return $timezoneanalysis;
         }
@@ -292,58 +291,63 @@ class hook_callbacks {
     /**
      * Analyze timezone conflicts between course, user, and server timezones.
      * 
-     * @param string $courseTimeZone The course timezone
+     * @param string $coursetimezone The course timezone
      * @return array Array containing timezone analysis data
      */
-    protected static function analyze_timezone_conflicts($courseTimeZone): array {
+    protected static function analyze_timezone_conflicts($coursetimezone): array {
         $usertz = core_date::get_user_timezone();
         $servertz = core_date::get_server_timezone();
         $servertimezone = get_config('core', 'timezone');
         
         // Course defaults to server time zone if empty
-        if ($courseTimeZone === "") {
-            $courseTimeZone = $servertimezone;
+        if ($coursetimezone === "") {
+            $coursetimezone = $servertimezone;
         }
         
-        $isDifferentServerTimezone = $courseTimeZone !== $servertimezone;
-        $isDifferentUserTimezone = $usertz !== $courseTimeZone;
-        $isDifferentTimezone = $isDifferentUserTimezone || $isDifferentServerTimezone;
+        $isdifferentservertimezone = $coursetimezone !== $servertimezone;
+        $isdifferentusertimezone = $usertz !== $coursetimezone;
+        $isdifferentusertimezone = $isdifferentusertimezone || $isdifferentservertimezone;
         
         // Determine visual indicator tone
         $tone = 'red';  // Default to indicating conflict
-        if ($isDifferentServerTimezone && !$isDifferentUserTimezone) {
+        if ($isdifferentservertimezone && !$isdifferentusertimezone) {
             // User's prefs match the course, even if different from server
             $tone = 'green';
         }
         
         return [
-            'courseTimeZone' => $courseTimeZone,
+            'coursetimezone$coursetimezone' => $coursetimezone,
             'usertz' => $usertz,
             'servertz' => $servertz,
             'servertimezone' => $servertimezone,
-            'isDifferentTimezone' => $isDifferentTimezone,
-            'isDifferentServerTimezone' => $isDifferentServerTimezone,
-            'isDifferentUserTimezone' => $isDifferentUserTimezone,
-            'tone' => $tone
+            'isdifferenttimezone' => $isdifferentusertimezone,
+            'isdifferentservertimezone' => $isdifferentservertimezone,
+            'isdifferentusertimezone' => $isdifferentusertimezone,
+            'tone' => $tone,
         ];
     }
 
-    static $coursetimezone_cache = [];
+    /**
+     * @var array Cache of course timezone custom field data.
+     */
+    static $coursetimezonecache = [];
     /**
      * Returns either a single value for a named field, or the all of the values for a course.
+     * 
+     * This can be called as part of the public API.
      * @param \stdClass $course The
      * @param string|bool $name The name of the field to return, or false to return all fields.
      * @return \stdClass|string|bool The value of the field, or all fields, or false on error.
      * @throws \dml_exception
      */
-    static function get_custom_field_data($course, $name = false): \stdClass | string | bool {
+    public static function get_custom_field_data($course, $name = false): \stdClass | string | bool {
         $rv = false;
         if (self::check_config() === false) {
             return false;
         }
-        // TODO Caching
-        if (isset(hook_callbacks::$coursetimezone_cache[$course->id])) {
-            $rv = hook_callbacks::$coursetimezone_cache[$course->id];
+        // TODO Caching.
+        if (isset(self::$coursetimezonecache[$course->id])) {
+            $rv = self::$coursetimezonecache[$course->id];
         } else {
             // Fetch data.
             $handler = \core_customfield\handler::get_handler('core_course', 'course');
@@ -353,7 +357,7 @@ class hook_callbacks {
             foreach ($datas as $d) {
                 $rv->{$d->get_shortname()} = $d->get_data_controller()->get_value();
             }
-            hook_callbacks::$coursetimezone_cache[$course->id] = $rv;
+            self::$coursetimezonecache[$course->id] = $rv;
         }
         // We want just 1 value.
         if ($name !== false) {

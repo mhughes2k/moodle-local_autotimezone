@@ -27,7 +27,7 @@
 import $ from 'jquery';
 import log from 'core/loglevel';
 import Templates from 'core/templates';
-import {get_strings} from "core/str";
+import {getStrings} from "core/str";
 
 /**
  * Initialize the timezone awareness indicator.
@@ -98,7 +98,7 @@ export const init = async(tone,
         }}
     ];
     log.debug(strrequests);
-    const strings = await get_strings(
+    const strings = await getStrings(
         strrequests
     );
     log.debug(strings);

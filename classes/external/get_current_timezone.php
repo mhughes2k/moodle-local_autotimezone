@@ -83,8 +83,6 @@ class get_current_timezone extends \core_external\external_api {
 
     /**
      * Autotimezone.com API backend.
-     * @param string $usertz
-     * @param string $params
      * @param {string} $usertz User's timezone from profile.
      * @param {string[]} $params Web Service Parameters.
      * @return object

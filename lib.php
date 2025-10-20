@@ -86,7 +86,7 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
         null,
         $content
     ));
-    
+
     if ($userenabled) {
         $nextcheck = get_user_preferences('local_autotimezone_nextcheck', false);
         $content = $nextcheck
@@ -98,7 +98,7 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
             $button = new \single_button($url, get_string('resumechecking', 'local_autotimezone'), 'post');
             $content .= \html_writer::tag('div', $OUTPUT->render($button));
         } else {
-            // Pause 
+            // Pause.
             $delay = get_config('local_autotimezone', 'delay');
             // TODO Convert delay in to human readable format.
 
@@ -134,7 +134,8 @@ function local_autotimezone_user_preferences() {
     ];
 }
 
-function local_autotimezone_render_navbar_output($output) {
-    var_dump($output);
-    return "HELLO!";
-}
+// This function does not seem to be fired.
+// function local_autotimezone_render_navbar_output($output) {
+//     var_dump($output);
+//     return "HELLO!";
+// }

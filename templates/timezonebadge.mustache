@@ -16,5 +16,11 @@
 }}
 {{!
 @template local_autotimezone/timezonebadge
+    Displays simple "badge" like interface.
+
+    Example context (json):
+    {
+        nextcheck: 12345678901
+    }
 !}}
-<span style="color:{{tone}}">{{#pix}} i/siteevent, core, {{{message}}} {{/pix}}</span>
+<span class="{{tone}}">{{#pix}} i/siteevent, core, {{{message}}} {{/pix}}</span>

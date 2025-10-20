@@ -67,11 +67,10 @@ if ($hassiteconfig) {
             get_string('shownotificationforcourseserverconflict_desc', 'local_autotimezone'),
             0
         ));
-        
 
         $handler = \core_customfield\handler::get_handler('core_course', 'course');
         $fields = $handler->get_fields();
-        // var_dump($fields);
+
         // Extract the shortname and name into a simple array for the options.
         $fieldopts = ['' => get_string('disabled', 'local_autotimezone')];
         foreach ($fields as $field) {
@@ -131,14 +130,16 @@ if ($hassiteconfig) {
                 'backendlocal',
                 get_string('backend_local', 'local_autotimezone'),
                 get_string('backend_local_desc', 'local_autotimezone')
-            ));
+            )
+        );
 
         $settings->add(
             new admin_setting_heading(
                 'backendtimezonedb',
                 get_string('backend_timezonedb', 'local_autotimezone'),
                 get_string('backend_timezonedb_desc', 'local_autotimezone')
-            ));
+            )
+        );
         $settings->add(new admin_setting_configtext(
             'local_autotimezone/timezonedbapikey',
             get_string('timezonedbapikey', 'local_autotimezone'),
