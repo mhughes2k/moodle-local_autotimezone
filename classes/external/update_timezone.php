@@ -20,7 +20,7 @@ defined('MOODLE_INTERNAL') || die;
 
 use core_external\external_value;
 use core_external\external_function_parameters;
-use \core\user;
+use core\user;
 
 require_once($CFG->dirroot . '/user/lib.php');
 
@@ -31,7 +31,6 @@ require_once($CFG->dirroot . '/user/lib.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class update_timezone extends \core_external\external_api {
-
     /**
      * Defined web service parameters.
      * @return external_function_parameters
@@ -51,6 +50,7 @@ class update_timezone extends \core_external\external_api {
     }
     /**
      * Makes a request to API to convert current lat long to timezone
+     * @param string $timezone Timezone to set.
      * @return void
      * @throws \dml_exception
      */

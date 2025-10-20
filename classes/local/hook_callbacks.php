@@ -30,6 +30,9 @@ use function DI\get;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
+    /**
+     * @var string Default name for a custom course field that holds a timezone value (e.g. "Asia/Bahrain").
+     */
     const DEFAULT_FIELDNAME = 'modulelocation';
     /**
      * @var string The name of the custom course field that holds a timezone value (e.g. "Asia/Bahrain").
@@ -223,6 +226,9 @@ class hook_callbacks {
      *  * Get the course timezone from the custom field.
      *  * Analyze timezone conflicts.
      *  * Displaying banner "notification" if configured.
+     * @param \core\hook\output\before_standard_top_of_body_html_generation|\core_user\hook\extend_user_menu $hook
+     * @param \context|null $context The context to use to find the course. If null, no course context is used.
+     * @return array|false The timezone analysis data, or false if not available.
      */
     protected static function load_datetime_tz_extension_core($hook, ?\context $context = null ): array | false {
         global $OUTPUT;
@@ -246,22 +252,22 @@ class hook_callbacks {
         $course = $context ? get_course($context->instanceid) : null;
         // This will return false if not configured correctly.
         if ($course && $courseTimeZone = self::get_custom_field_data($course, self::$tzcustomfieldname)) {
-            $timezoneAnalysis = self::analyze_timezone_conflicts($courseTimeZone);
+            $timezoneanalysis = self::analyze_timezone_conflicts($courseTimeZone);
             // Add notification to user if there is a conflict.
             $tza =(object)[
-                'usertz' => $timezoneAnalysis['usertz'],
-                'coursetz' => $timezoneAnalysis['courseTimeZone'],
-                'servertz' => $timezoneAnalysis['servertz'],
+                'usertz' => $timezoneanalysis['usertz'],
+                'coursetz' => $timezoneanalysis['courseTimeZone'],
+                'servertz' => $timezoneanalysis['servertz'],
             ];
 
             $coursenotificationenabled = get_config('local_autotimezone', 'coursenotificationenabled');
             $shownotificationforcourseserverconflict = get_config('local_autotimezone', 'shownotificationforcourseserverconflict');
             if ($coursenotificationenabled) {
-                if ($timezoneAnalysis['isDifferentTimezone']) {
+                if ($timezoneanalysis['isDifferentTimezone']) {
                     $what = false;
-                    if ($timezoneAnalysis['isDifferentUserTimezone']) {
+                    if ($timezoneanalysis['isDifferentUserTimezone']) {
                         $what = 'usermoduletimezonemismatch';
-                    } else if ($shownotificationforcourseserverconflict && $timezoneAnalysis['isDifferentServerTimezone']) {
+                    } else if ($shownotificationforcourseserverconflict && $timezoneanalysis['isDifferentServerTimezone']) {
                         $what = 'servermoduletimezonemismatch';
                     } 
                     if ($what ?? false) {
@@ -276,10 +282,10 @@ class hook_callbacks {
                         }
                     }
                 }
-                
-            }  
-            return $timezoneAnalysis;
-        } 
+
+            }
+            return $timezoneanalysis;
+        }
         return self::analyze_timezone_conflicts("");
     }
 

@@ -18,8 +18,7 @@ namespace local_autotimezone\external;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->libdir .'/filelib.php');
-
+require_once($CFG->libdir . '/filelib.php');
 
 use core_external\external_function_parameters;
 use core_external\external_value;
@@ -32,7 +31,6 @@ use core_external\external_single_structure;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class get_current_timezone extends \core_external\external_api {
-
     /**
      * Define service parameters.
      * @return external_function_parameters
@@ -58,6 +56,8 @@ class get_current_timezone extends \core_external\external_api {
     }
     /**
      * Makes a request to API to convert current lat long to timezone
+     * @param string $latitude Latitude. Technically a float.
+     * @param string $longitude Longitude. Technically a float.
      * @return mixed
      * @throws \dml_exception
      */
@@ -131,7 +131,7 @@ class get_current_timezone extends \core_external\external_api {
             'message' => "Profile TZ ({$usertz}) matches browser TZ ({$json->zoneName}).",
             'profiletimezone' => $usertz,
             'timezone' => $json->zoneName,
-        ];;
+        ];
     }
 
     /**

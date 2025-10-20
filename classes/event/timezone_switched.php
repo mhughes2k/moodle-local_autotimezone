@@ -25,6 +25,5 @@ namespace local_autotimezone\event;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class timezone_switched extends \core\event\base {
-
     // For more information about the Events API please visit {@link https://docs.moodle.org/dev/Events_API}.
 }
