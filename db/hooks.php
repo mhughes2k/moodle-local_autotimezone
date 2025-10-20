@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-if ($CFG->branch > 404) {
+if (isset($CFG->branch) && $CFG->branch > 404) {
     $callbacks = [
         // This loads the User location checking against profile timezone and course timezone.
         [
