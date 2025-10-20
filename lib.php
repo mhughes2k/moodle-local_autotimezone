@@ -77,7 +77,6 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
         $url = new \moodle_url('/local/autotimezone/toggle.php', ['enable' => 1]);
         $button = new \single_button($url, get_string('enable', 'local_autotimezone'), 'post');
         $content .= $OUTPUT->render($button);
-
     }
     $tree->add_node(new node(
         'local_autotimezone',
@@ -116,7 +115,6 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
             $content
         ));
     }
-    
 }
 
 /**
@@ -134,4 +132,9 @@ function local_autotimezone_user_preferences() {
             'type' => PARAM_INT,
         ],
     ];
+}
+
+function local_autotimezone_render_navbar_output($output) {
+    var_dump($output);
+    return "HELLO!";
 }

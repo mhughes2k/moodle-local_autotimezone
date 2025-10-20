@@ -24,9 +24,21 @@
 require_once(__DIR__ . '/../../config.php');
 require_login();
 
+/**
+ * Disable action constant.
+ */
 const ACTION_DISABLE = 0;
+/**
+ * Enable action constant.
+ */
 const ACTION_ENABLE = 1;
+/**
+ * Check now action constant.
+ */
 const ACTION_CHECKNOW = 2;
+/**
+ * Pause action constant.
+ */
 const ACTION_PAUSE = 3;
 
 $state = required_param('enable', PARAM_INT);

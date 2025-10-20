@@ -39,6 +39,10 @@ $string['configok'] = 'Basic Configuration OK';
 $string['coursenotification'] = 'Display in-course notification';
 $string['coursenotification_desc'] = "Display a notification on course pages if user's timezone doesn't match the course's timezone.";
 $string['coursenotification_link'] = 'https://mhughes2k.github.io/moodle-local_autotimezone/help/coursenotification';
+$string['coursenotificationtype'] = 'Notification type';
+$string['coursenotificationtype_desc'] = 'Select how the notification is displayed in-course.';
+$string['cntype:banner'] = 'Banner at top of course page';
+$string['cntype:usermenu'] = 'Item in user menu';
 $string['coursetimezonefield'] = 'Course timezone field';
 $string['coursetimezonefield_desc'] = "Select the course custom field that holds the timezone value for the course's location.";
 $string['coursetimezoneis'] = 'Course timezone is {$a->coursetz}.';
@@ -63,7 +67,7 @@ $string['servermoduletimezonemismatch'] = "Module timezone ({\$a->coursetz}) is 
 $string['shownotificationforcourseserverconflict'] = 'Show Course - Server time zone mismatch';
 $string['shownotificationforcourseserverconflict_desc'] = "Show notification if course timezone and server timezone don't match.
 
-Requires `Display in-course notification` to be enabled.";
+Requires **Display in-course notification** to be enabled.";
 $string['timezoneconflicthelp'] = 'Time Zone Conflict';
 $string['timezoneconflicthelp_help'] = "Your time zone is different from the either the server or the course.
 
@@ -79,6 +83,7 @@ $string['updatemodaltitle'] = 'Update Timezone';
 $string['updatemodalupdatebutton'] = 'Update Timezone';
 $string['updatetimezone'] = 'Update Timezone';
 $string['updatetimezoneto'] = 'Update Timezone to {$a->currentTz}';
+$string['usermenu:timezoneconflictindicator'] = 'Timezone Conflict';
 $string['usermoduletimezonemismatch'] = 'Your timezone ({$a->usertz}) does not match course timezone ({$a->coursetz}).';
 $string['warnontimezoneswitch'] = 'Display if timezone doesn\'t match profile timezone';
 $string['youaresettingtimezone'] = 'You are setting the time in "{$a->usertz}" timezone!';

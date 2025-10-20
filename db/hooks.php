@@ -21,6 +21,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_user\hook\extend_user_menu;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -35,6 +37,11 @@ if ($CFG->branch > 404) {
         [
             'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
             'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension'],
+            'priority' => 500,
+        ],
+        [
+            'hook' => extend_user_menu::class,
+            'callback' => [\local_autotimezone\local\hook_callbacks::class, 'load_datetime_tz_extension_usermenu'],
             'priority' => 500,
         ],
     ];

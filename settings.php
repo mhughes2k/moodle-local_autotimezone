@@ -30,7 +30,7 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', $settings);
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree && $ADMIN->locate('localplugins')) {
-        $checkresult = \local_autotimezone\local\hook_callbacks::check_config(true);
+        $checkresult = \local_autotimezone\local\hook_callbacks::config_report();
         // TODO A global on/off setting.
         $settings->add(new admin_setting_configcheckbox(
             'local_autotimezone/enabled',
@@ -49,6 +49,17 @@ if ($hassiteconfig) {
             get_string('coursenotification', 'local_autotimezone'),
             get_string('coursenotification_desc', 'local_autotimezone'),
             0
+        ));
+        $settings->add(new admin_setting_configselect(
+            'local_autotimezone/coursenotificationtype',
+            get_string('coursenotificationtype', 'local_autotimezone'),
+            get_string('coursenotificationtype_desc', 'local_autotimezone'),
+            'top',
+            [
+                'banner' => get_string('cntype:banner', 'local_autotimezone'),
+                'usermenu' => get_string('cntype:usermenu', 'local_autotimezone'),
+            ],
+            'banner'
         ));
         $settings->add(new admin_setting_configcheckbox(
             'local_autotimezone/shownotificationforcourseserverconflict',
