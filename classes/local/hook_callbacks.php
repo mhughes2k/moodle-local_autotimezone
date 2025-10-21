@@ -176,11 +176,11 @@ class hook_callbacks {
                 'init',
                 [
                     $timezoneanalysis['tone'],
-                    $timezoneanalysis['isdifferenttimzone$isdifferentusertimezone'],
-                    $timezoneanalysis['coursetimezone$coursetimezone'],
+                    $timezoneanalysis['isdifferenttimezone'],
+                    $timezoneanalysis['coursetimezone'],
                     $timezoneanalysis['usertz'],
                     $timezoneanalysis['servertz'],
-                    $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone'],
+                    $timezoneanalysis['isdifferentservertimezone'],
                     $timezoneanalysis['isdifferentusertimezone'],
                 ]
             );
@@ -201,7 +201,7 @@ class hook_callbacks {
                     'local_autotimezone',
                     (object)[
                         'usertz' => $timezoneanalysis['usertz'],
-                        'coursetz' => $timezoneanalysis['coursetimezone$coursetimezone'],
+                        'coursetz' => $timezoneanalysis['coursetimezone'],
                         'servertz' => $timezoneanalysis['servertz'],
                     ]
                 );
@@ -238,12 +238,10 @@ class hook_callbacks {
         // Check enablement first.
         $enabled = get_config('local_autotimezone', 'datetimeenhancementsenabled');
         if (!$enabled) {
-            debugging('Datetime enhancements not enabled', DEBUG_DEVELOPER);
             return false;
         }
         // This doesn't work if we're not logged in.
         if (isguestuser() || !isloggedin()) {
-            debugging('Guest/not loggedin', DEBUG_DEVELOPER);
             return false;
         }
 
@@ -258,20 +256,20 @@ class hook_callbacks {
             // Add notification to user if there is a conflict.
             $tza = (object) [
                 'usertz' => $timezoneanalysis['usertz'],
-                'coursetz' => $timezoneanalysis['coursetimezone$coursetimezone'],
+                'coursetz' => $timezoneanalysis['coursetimezone'],
                 'servertz' => $timezoneanalysis['servertz'],
             ];
 
             $coursenotificationenabled = get_config('local_autotimezone', 'coursenotificationenabled');
             $shownotificationforcourseserverconflict = get_config('local_autotimezone', 'shownotificationforcourseserverconflict');
             if ($coursenotificationenabled) {
-                if ($timezoneanalysis['isdifferenttimzone$isdifferentusertimezone']) {
+                if ($timezoneanalysis['isdifferenttimezone']) {
                     $what = false;
                     if ($timezoneanalysis['isdifferentusertimezone']) {
                         $what = 'usermoduletimezonemismatch';
                     } else if (
                         $shownotificationforcourseserverconflict && 
-                        $timezoneanalysis['isdifferentservertimezone$isdifferentservertimezone']
+                        $timezoneanalysis['isdifferentservertimezone']
                     ) {
                         $what = 'servermoduletimezonemismatch';
                     }
@@ -321,7 +319,7 @@ class hook_callbacks {
         }
 
         return [
-            'coursetimezone$coursetimezone' => $coursetimezone,
+            'coursetimezone' => $coursetimezone,
             'usertz' => $usertz,
             'servertz' => $servertz,
             'servertimezone' => $servertimezone,
