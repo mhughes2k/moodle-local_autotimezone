@@ -214,8 +214,6 @@ class hook_callbacks {
                     ]
                 );
             }
-        } else {
-            debugging('Timezone analysis not available in usermenu hook', DEBUG_DEVELOPER);
         }
     }
 
