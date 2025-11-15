@@ -134,16 +134,47 @@ class get_current_timezone extends \core_external\external_api {
 
     /**
      * Non-API based back end.
+     *
+     * Uses local timezone boundary data to determine timezone from coordinates
+     * without relying on external APIs. Falls back to longitude-based calculation
+     * if boundary data lookup fails.
+     *
      * @param {string} $usertz User's timezone from profile.
      * @param {string[]} $params Web Service Parameters.
      * @return object Status object (status, message, profiletimezone, timezone)
      */
     protected static function backend_local(string $usertz, array $params): object {
+        // Use the timezone lookup utility.
+        $detectedtz = \local_autotimezone\local\timezone_lookup::lookup(
+            floatval($params['latitude']),
+            floatval($params['longitude'])
+        );
+
+        if ($detectedtz === null) {
+            // Unable to determine timezone from coordinates.
+            return (object) [
+                'status' => 'error',
+                'message' => "Unable to determine timezone from location ({$params['latitude']}, {$params['longitude']})",
+                'profiletimezone' => $usertz,
+                'timezone' => $usertz,
+            ];
+        }
+
+        if ($usertz != $detectedtz) {
+            // We have a mismatch between the user's profile timezone and their browser's location timezone.
+            return (object) [
+                'status' => 'moved',
+                'message' => "Profile TZ ({$usertz}) does not match detected TZ ({$detectedtz}).",
+                'profiletimezone' => $usertz,
+                'timezone' => $detectedtz,
+            ];
+        }
+
         return (object) [
             'status' => 'match',
-            'message' => "Not implemented, always matches ({$params['latitude']}&lng={$params['longitude']})",
+            'message' => "Profile TZ ({$usertz}) matches detected TZ ({$detectedtz}).",
             'profiletimezone' => $usertz,
-            'timezone' => $usertz,
+            'timezone' => $detectedtz,
         ];
     }
 }

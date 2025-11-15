@@ -26,7 +26,26 @@
 defined('MOODLE_INTERNAL') || die();
 $string['autotimezone:use'] = 'Allow users to use the Automatic Time Zone Switcher';
 $string['backend_local'] = 'Local Backend';
-$string['backend_local_desc'] = 'Local Backend';
+$string['backend_local_desc'] = 'Use local timezone boundary data to determine timezone from coordinates without external API calls.
+
+This method uses precomputed timezone boundary boxes stored in the plugin and does not require any API keys or external network requests. It provides good accuracy for major cities and regions worldwide.
+
+<strong>Advantages:</strong>
+<ul>
+<li>No external API required</li>
+<li>No API key needed</li>
+<li>No network latency</li>
+<li>Works offline</li>
+<li>No API rate limits</li>
+<li>Privacy-friendly (no data sent externally)</li>
+</ul>
+
+<strong>Limitations:</strong>
+<ul>
+<li>May be less accurate in border regions or remote areas</li>
+<li>Timezone data file needs manual updates for new timezone definitions</li>
+<li>Uses simplified bounding boxes rather than precise polygon boundaries</li>
+</ul>';
 $string['backend_timezonedb'] = 'TimeZoneDB Backend';
 $string['backend_timezonedb_desc'] = 'Use the <a href="https://timezonedb.com/">https://timezonedb.com/</a> API to get the timezone.
 

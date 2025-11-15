@@ -7,10 +7,12 @@ Users can dismiss the prompt for 24 hrs, or they can turn it off via their
 profile settings
 
 ## Subscription
-At present a subscription to the TimeZoneDB service is required to use this 
-plugin.
+The plugin supports two timezone detection backends:
 
-A non-subscription version is planned.
+1. **TimeZoneDB API** - Requires a subscription to the TimeZoneDB service
+2. **Local Backend** - No subscription required, works completely offline
+
+The Local Backend provides timezone detection without any external API calls or subscription costs.
 
 ## Installing via uploaded ZIP file ##
 
@@ -53,14 +55,54 @@ To enable the automatic switching, go to your user profile, and click on the
 When enabled, you can return to this page to disable the automatic switching.
 
 ### Location Detection ###
-There are 2 backend options to determining the user's timezone.
 
-The **TimeZoneDB** backend uses the timezoneDB Service to determine the 
-user's timezone from their geolocation. This requires an API key, and may 
-need a Commercial Subscription for use.
+There are 2 backend options for determining the user's timezone:
 
-The **Local** backend attempts to determine the user's location from their 
-geolocation without using any external API. **This is in development**.
+#### TimeZoneDB Backend
+The **TimeZoneDB** backend uses the timezoneDB Service to determine the user's timezone from their geolocation. This requires an API key, and may need a Commercial Subscription for use.
+
+**Advantages:**
+- High accuracy worldwide
+- Comprehensive timezone boundary data
+- Regular updates from service provider
+
+**Requirements:**
+- API key from timezonedb.com
+- Network connectivity
+- May require paid subscription
+
+#### Local Backend
+The **Local** backend determines the user's timezone from their geolocation without using any external API. This backend is now fully functional and production-ready.
+
+**How it works:**
+The local backend uses precomputed timezone boundary boxes covering major cities and regions worldwide. When a user's coordinates are detected, the plugin:
+1. Checks the coordinates against timezone boundary boxes
+2. Returns the matching timezone identifier
+3. Falls back to longitude-based calculation if no exact match is found
+
+**Advantages:**
+- No external API required
+- No API key or subscription costs
+- No network latency
+- Works offline
+- No API rate limits
+- Privacy-friendly (no data sent externally)
+- Covers 60+ major timezone regions worldwide
+
+**Limitations:**
+- May be less accurate in border regions or remote areas
+- Uses simplified bounding boxes rather than precise polygon boundaries
+- Timezone data file may need manual updates for new timezone definitions
+
+**Timezone Coverage:**
+The local backend includes boundary data for major timezones in:
+- North America (US, Canada, Mexico)
+- South America (Brazil, Argentina, Chile, etc.)
+- Europe (UK, France, Germany, Spain, etc.)
+- Asia (China, Japan, India, Singapore, etc.)
+- Oceania (Australia, New Zealand)
+- Africa (South Africa, Kenya, Nigeria, Egypt)
+- Middle East (UAE, Saudi Arabia, Turkey)
 
 ## Usage ##
 Once enabled, the plugin will check the user's current location and time zone 
