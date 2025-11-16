@@ -169,7 +169,37 @@ When boundary data doesn't match, the fallback uses:
 
 ## Updating Timezone Data
 
-To update the timezone boundary data:
+The plugin includes a CLI script to regenerate timezone_data.json from authoritative sources.
+
+### Using the CLI Generator
+
+**Location:** `cli/generate_timezone_data.php`
+
+**Basic Usage:**
+```bash
+# From plugin directory (inside Docker container)
+docker exec moodle501-webserver-1 php /var/www/html/public/local/autotimezone/cli/generate_timezone_data.php
+
+# With custom output location
+docker exec moodle501-webserver-1 php /var/www/html/public/local/autotimezone/cli/generate_timezone_data.php --output=/tmp/custom_tz.json
+```
+
+**Options:**
+- `--geojson=PATH` - Import from timezone-boundary-builder GeoJSON file
+- `--output=PATH` - Specify output file location (default: timezone_data.json)
+- `--major` - Only include major timezones (default: true)
+- `--help` - Display usage information
+
+**With GeoJSON Data (Higher Precision):**
+```bash
+# Download GeoJSON data from https://github.com/evansiroky/timezone-boundary-builder/releases
+# Then generate with polygon boundaries:
+docker exec moodle501-webserver-1 php /var/www/html/public/local/autotimezone/cli/generate_timezone_data.php --geojson=/tmp/combined.json
+```
+
+### Manual Method
+
+To update the timezone boundary data manually:
 
 1. **Manual Method**:
    - Edit `timezone_data.json`

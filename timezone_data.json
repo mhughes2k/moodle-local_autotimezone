@@ -1,312 +1,744 @@
 {
-  "version": "1.0",
-  "generated": "2025-11-15",
-  "description": "Simplified timezone boundary data for local timezone detection",
-  "timezones": [
-    {
-      "timezone": "Pacific/Auckland",
-      "bounds": [-47.3, 166.4, -34.4, 178.6],
-      "description": "New Zealand"
-    },
-    {
-      "timezone": "Australia/Sydney",
-      "bounds": [-43.6, 140.9, -28.2, 153.6],
-      "description": "Eastern Australia"
-    },
-    {
-      "timezone": "Australia/Melbourne",
-      "bounds": [-39.2, 140.9, -34.0, 149.9],
-      "description": "Victoria, Australia"
-    },
-    {
-      "timezone": "Australia/Brisbane",
-      "bounds": [-28.8, 138.0, -10.7, 153.6],
-      "description": "Queensland, Australia"
-    },
-    {
-      "timezone": "Australia/Adelaide",
-      "bounds": [-38.1, 129.0, -26.0, 141.0],
-      "description": "South Australia"
-    },
-    {
-      "timezone": "Australia/Perth",
-      "bounds": [-35.1, 112.9, -13.7, 129.0],
-      "description": "Western Australia"
-    },
-    {
-      "timezone": "Asia/Tokyo",
-      "bounds": [24.0, 122.9, 45.5, 145.8],
-      "description": "Japan"
-    },
-    {
-      "timezone": "Asia/Seoul",
-      "bounds": [33.1, 124.6, 38.6, 131.9],
-      "description": "South Korea"
-    },
-    {
-      "timezone": "Asia/Shanghai",
-      "bounds": [18.2, 73.5, 53.6, 135.1],
-      "description": "China (entire country uses single timezone)"
-    },
-    {
-      "timezone": "Asia/Hong_Kong",
-      "bounds": [22.1, 113.8, 22.6, 114.4],
-      "description": "Hong Kong"
-    },
-    {
-      "timezone": "Asia/Singapore",
-      "bounds": [1.2, 103.6, 1.5, 104.0],
-      "description": "Singapore"
-    },
-    {
-      "timezone": "Asia/Kuala_Lumpur",
-      "bounds": [0.9, 99.6, 7.4, 119.3],
-      "description": "Malaysia"
-    },
-    {
-      "timezone": "Asia/Bangkok",
-      "bounds": [5.6, 97.3, 20.5, 105.6],
-      "description": "Thailand"
-    },
-    {
-      "timezone": "Asia/Jakarta",
-      "bounds": [-10.3, 95.0, 5.9, 116.0],
-      "description": "Western Indonesia"
-    },
-    {
-      "timezone": "Asia/Manila",
-      "bounds": [4.6, 116.9, 21.1, 126.6],
-      "description": "Philippines"
-    },
-    {
-      "timezone": "Asia/Kolkata",
-      "bounds": [6.7, 68.2, 35.5, 97.4],
-      "description": "India"
-    },
-    {
-      "timezone": "Asia/Karachi",
-      "bounds": [23.7, 60.9, 37.1, 77.8],
-      "description": "Pakistan"
-    },
-    {
-      "timezone": "Asia/Dubai",
-      "bounds": [22.6, 51.6, 26.1, 56.4],
-      "description": "UAE"
-    },
-    {
-      "timezone": "Asia/Riyadh",
-      "bounds": [16.4, 34.6, 32.2, 55.7],
-      "description": "Saudi Arabia"
-    },
-    {
-      "timezone": "Europe/London",
-      "bounds": [49.9, -8.2, 60.8, 1.8],
-      "description": "United Kingdom"
-    },
-    {
-      "timezone": "Europe/Dublin",
-      "bounds": [51.4, -10.5, 55.4, -5.4],
-      "description": "Ireland"
-    },
-    {
-      "timezone": "Europe/Paris",
-      "bounds": [41.3, -5.1, 51.1, 9.6],
-      "description": "France"
-    },
-    {
-      "timezone": "Europe/Berlin",
-      "bounds": [47.3, 5.9, 55.1, 15.0],
-      "description": "Germany"
-    },
-    {
-      "timezone": "Europe/Amsterdam",
-      "bounds": [50.7, 3.4, 53.5, 7.2],
-      "description": "Netherlands"
-    },
-    {
-      "timezone": "Europe/Brussels",
-      "bounds": [49.5, 2.5, 51.5, 6.4],
-      "description": "Belgium"
-    },
-    {
-      "timezone": "Europe/Madrid",
-      "bounds": [36.0, -9.3, 43.8, 3.3],
-      "description": "Spain"
-    },
-    {
-      "timezone": "Europe/Rome",
-      "bounds": [36.6, 6.6, 47.1, 18.5],
-      "description": "Italy"
-    },
-    {
-      "timezone": "Europe/Zurich",
-      "bounds": [45.8, 6.0, 47.8, 10.5],
-      "description": "Switzerland"
-    },
-    {
-      "timezone": "Europe/Vienna",
-      "bounds": [46.4, 9.5, 49.0, 17.2],
-      "description": "Austria"
-    },
-    {
-      "timezone": "Europe/Stockholm",
-      "bounds": [55.3, 11.0, 69.1, 24.2],
-      "description": "Sweden"
-    },
-    {
-      "timezone": "Europe/Oslo",
-      "bounds": [57.9, 4.5, 71.2, 31.1],
-      "description": "Norway"
-    },
-    {
-      "timezone": "Europe/Copenhagen",
-      "bounds": [54.6, 8.1, 57.7, 15.2],
-      "description": "Denmark"
-    },
-    {
-      "timezone": "Europe/Helsinki",
-      "bounds": [59.8, 20.5, 70.1, 31.6],
-      "description": "Finland"
-    },
-    {
-      "timezone": "Europe/Athens",
-      "bounds": [34.8, 19.4, 41.7, 28.2],
-      "description": "Greece"
-    },
-    {
-      "timezone": "Europe/Istanbul",
-      "bounds": [36.0, 26.0, 42.1, 44.8],
-      "description": "Turkey"
-    },
-    {
-      "timezone": "Europe/Moscow",
-      "bounds": [41.2, 27.3, 81.9, 180.0],
-      "description": "Western Russia"
-    },
-    {
-      "timezone": "Europe/Warsaw",
-      "bounds": [49.0, 14.1, 54.8, 24.1],
-      "description": "Poland"
-    },
-    {
-      "timezone": "Europe/Prague",
-      "bounds": [48.6, 12.1, 51.1, 18.9],
-      "description": "Czech Republic"
-    },
-    {
-      "timezone": "Europe/Bucharest",
-      "bounds": [43.6, 20.3, 48.3, 29.7],
-      "description": "Romania"
-    },
-    {
-      "timezone": "Africa/Cairo",
-      "bounds": [22.0, 25.0, 31.7, 36.9],
-      "description": "Egypt"
-    },
-    {
-      "timezone": "Africa/Johannesburg",
-      "bounds": [-34.8, 16.5, -22.1, 32.9],
-      "description": "South Africa"
-    },
-    {
-      "timezone": "Africa/Lagos",
-      "bounds": [4.3, 2.7, 13.9, 14.7],
-      "description": "Nigeria"
-    },
-    {
-      "timezone": "Africa/Nairobi",
-      "bounds": [-4.7, 33.9, 5.0, 41.9],
-      "description": "Kenya"
-    },
-    {
-      "timezone": "America/New_York",
-      "bounds": [24.5, -87.6, 49.4, -66.9],
-      "description": "US Eastern Time"
-    },
-    {
-      "timezone": "America/Chicago",
-      "bounds": [25.8, -106.6, 49.4, -80.5],
-      "description": "US Central Time"
-    },
-    {
-      "timezone": "America/Denver",
-      "bounds": [31.3, -124.6, 49.0, -102.0],
-      "description": "US Mountain Time"
-    },
-    {
-      "timezone": "America/Los_Angeles",
-      "bounds": [32.5, -124.5, 49.0, -114.1],
-      "description": "US Pacific Time"
-    },
-    {
-      "timezone": "America/Phoenix",
-      "bounds": [31.3, -114.8, 37.0, -109.0],
-      "description": "Arizona (no DST)"
-    },
-    {
-      "timezone": "America/Anchorage",
-      "bounds": [51.2, -179.1, 71.4, -129.9],
-      "description": "Alaska"
-    },
-    {
-      "timezone": "Pacific/Honolulu",
-      "bounds": [18.9, -160.2, 22.2, -154.8],
-      "description": "Hawaii"
-    },
-    {
-      "timezone": "America/Toronto",
-      "bounds": [41.7, -95.2, 83.1, -52.6],
-      "description": "Eastern Canada"
-    },
-    {
-      "timezone": "America/Vancouver",
-      "bounds": [48.3, -139.1, 60.0, -114.0],
-      "description": "Pacific Canada"
-    },
-    {
-      "timezone": "America/Mexico_City",
-      "bounds": [14.5, -118.4, 32.7, -86.7],
-      "description": "Central Mexico"
-    },
-    {
-      "timezone": "America/Sao_Paulo",
-      "bounds": [-33.7, -73.9, 5.3, -34.8],
-      "description": "Brazil (Brasilia Time)"
-    },
-    {
-      "timezone": "America/Argentina/Buenos_Aires",
-      "bounds": [-55.1, -73.6, -21.8, -53.6],
-      "description": "Argentina"
-    },
-    {
-      "timezone": "America/Santiago",
-      "bounds": [-56.0, -109.5, -17.5, -66.4],
-      "description": "Chile"
-    },
-    {
-      "timezone": "America/Lima",
-      "bounds": [-18.3, -81.3, -0.0, -68.7],
-      "description": "Peru"
-    },
-    {
-      "timezone": "America/Bogota",
-      "bounds": [-4.2, -79.0, 12.5, -66.9],
-      "description": "Colombia"
-    },
-    {
-      "timezone": "America/Caracas",
-      "bounds": [0.6, -73.4, 12.2, -59.8],
-      "description": "Venezuela"
-    },
-    {
-      "timezone": "Atlantic/Reykjavik",
-      "bounds": [63.3, -24.5, 66.5, -13.5],
-      "description": "Iceland"
-    },
-    {
-      "timezone": "Atlantic/Azores",
-      "bounds": [36.9, -31.3, 39.7, -25.0],
-      "description": "Azores"
-    }
-  ]
+    "version": "1.0",
+    "generated": "2025-11-16 12:26:36",
+    "generator": "Moodle local_autotimezone CLI",
+    "timezones": [
+        {
+            "timezone": "America/New_York",
+            "bounds": [
+                36.2128,
+                -78.506,
+                45.2128,
+                -69.506
+            ],
+            "description": "New York",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Chicago",
+            "bounds": [
+                37.3781,
+                -92.1298,
+                46.3781,
+                -83.1298
+            ],
+            "description": "Chicago",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Denver",
+            "bounds": [
+                35.2392,
+                -109.4903,
+                44.2392,
+                -100.4903
+            ],
+            "description": "Denver",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Los_Angeles",
+            "bounds": [
+                29.5522,
+                -122.7437,
+                38.5522,
+                -113.7437
+            ],
+            "description": "Los Angeles",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Anchorage",
+            "bounds": [
+                56.7181,
+                -154.4003,
+                65.7181,
+                -145.4003
+            ],
+            "description": "Anchorage",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Phoenix",
+            "bounds": [
+                28.9484,
+                -116.574,
+                37.9484,
+                -107.574
+            ],
+            "description": "Phoenix",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Pacific/Honolulu",
+            "bounds": [
+                16.8099,
+                -162.3581,
+                25.8099,
+                -153.3581
+            ],
+            "description": "Honolulu",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Toronto",
+            "bounds": [
+                39.1532,
+                -83.8832,
+                48.1532,
+                -74.8832
+            ],
+            "description": "Toronto",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Vancouver",
+            "bounds": [
+                44.7827,
+                -127.6207,
+                53.7827,
+                -118.6207
+            ],
+            "description": "Vancouver",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Mexico_City",
+            "bounds": [
+                14.9326,
+                -103.6332,
+                23.9326,
+                -94.6332
+            ],
+            "description": "Mexico City",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Sao_Paulo",
+            "bounds": [
+                -28.0505,
+                -51.1333,
+                -19.0505,
+                -42.1333
+            ],
+            "description": "Sao Paulo",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Argentina/Buenos_Aires",
+            "bounds": [
+                -39.1037,
+                -62.8816,
+                -30.1037,
+                -53.8816
+            ],
+            "description": "Buenos Aires",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Santiago",
+            "bounds": [
+                -37.9489,
+                -75.1693,
+                -28.9489,
+                -66.1693
+            ],
+            "description": "Santiago",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Lima",
+            "bounds": [
+                -16.5464,
+                -81.5428,
+                -7.5464,
+                -72.5428
+            ],
+            "description": "Lima",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Bogota",
+            "bounds": [
+                0.211,
+                -78.5721,
+                9.211,
+                -69.5721
+            ],
+            "description": "Bogota",
+            "source": "calculated"
+        },
+        {
+            "timezone": "America/Caracas",
+            "bounds": [
+                5.9806,
+                -71.4036,
+                14.9806,
+                -62.4036
+            ],
+            "description": "Caracas",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/London",
+            "bounds": [
+                47.0074,
+                -4.6278,
+                56.0074,
+                4.3722
+            ],
+            "description": "London",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Dublin",
+            "bounds": [
+                48.8498,
+                -10.7603,
+                57.8498,
+                -1.7603
+            ],
+            "description": "Dublin",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Paris",
+            "bounds": [
+                44.3566,
+                -2.1478,
+                53.3566,
+                6.8522
+            ],
+            "description": "Paris",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Berlin",
+            "bounds": [
+                48.02,
+                8.905,
+                57.02,
+                17.905
+            ],
+            "description": "Berlin",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Madrid",
+            "bounds": [
+                35.9168,
+                -8.2038,
+                44.9168,
+                0.7962
+            ],
+            "description": "Madrid",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Rome",
+            "bounds": [
+                37.4028,
+                7.9964,
+                46.4028,
+                16.9964
+            ],
+            "description": "Rome",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Amsterdam",
+            "bounds": [
+                47.8676,
+                0.4041,
+                56.8676,
+                9.4041
+            ],
+            "description": "Amsterdam",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Brussels",
+            "bounds": [
+                46.3503,
+                -0.1483,
+                55.3503,
+                8.8517
+            ],
+            "description": "Brussels",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Vienna",
+            "bounds": [
+                43.7082,
+                11.8738,
+                52.7082,
+                20.8738
+            ],
+            "description": "Vienna",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Zurich",
+            "bounds": [
+                42.8769,
+                4.0417,
+                51.8769,
+                13.0417
+            ],
+            "description": "Zurich",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Stockholm",
+            "bounds": [
+                54.8293,
+                13.5686,
+                63.8293,
+                22.5686
+            ],
+            "description": "Stockholm",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Oslo",
+            "bounds": [
+                55.4139,
+                6.2522,
+                64.4139,
+                15.2522
+            ],
+            "description": "Oslo",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Copenhagen",
+            "bounds": [
+                51.1761,
+                8.0683,
+                60.1761,
+                17.0683
+            ],
+            "description": "Copenhagen",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Helsinki",
+            "bounds": [
+                55.6699,
+                20.4384,
+                64.6699,
+                29.4384
+            ],
+            "description": "Helsinki",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Athens",
+            "bounds": [
+                33.4838,
+                19.2275,
+                42.4838,
+                28.2275
+            ],
+            "description": "Athens",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Istanbul",
+            "bounds": [
+                36.5082,
+                24.4784,
+                45.5082,
+                33.4784
+            ],
+            "description": "Istanbul",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Moscow",
+            "bounds": [
+                51.2558,
+                33.1173,
+                60.2558,
+                42.1173
+            ],
+            "description": "Moscow",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Warsaw",
+            "bounds": [
+                47.7297,
+                16.5122,
+                56.7297,
+                25.5122
+            ],
+            "description": "Warsaw",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Prague",
+            "bounds": [
+                45.5755,
+                9.9378,
+                54.5755,
+                18.9378
+            ],
+            "description": "Prague",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Europe/Bucharest",
+            "bounds": [
+                39.9268,
+                21.6025,
+                48.9268,
+                30.6025
+            ],
+            "description": "Bucharest",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Dubai",
+            "bounds": [
+                20.7048,
+                50.7708,
+                29.7048,
+                59.7708
+            ],
+            "description": "Dubai",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Riyadh",
+            "bounds": [
+                20.2136,
+                42.1753,
+                29.2136,
+                51.1753
+            ],
+            "description": "Riyadh",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Karachi",
+            "bounds": [
+                20.3607,
+                62.5011,
+                29.3607,
+                71.5011
+            ],
+            "description": "Karachi",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Kolkata",
+            "bounds": [
+                24.1139,
+                72.709,
+                33.1139,
+                81.709
+            ],
+            "description": "Kolkata",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Dhaka",
+            "bounds": [
+                19.3103,
+                85.9125,
+                28.3103,
+                94.9125
+            ],
+            "description": "Dhaka",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Bangkok",
+            "bounds": [
+                9.2563,
+                96.0018,
+                18.2563,
+                105.0018
+            ],
+            "description": "Bangkok",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Jakarta",
+            "bounds": [
+                -10.7088,
+                102.3456,
+                -1.7088,
+                111.3456
+            ],
+            "description": "Jakarta",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Singapore",
+            "bounds": [
+                -3.1479,
+                99.3198,
+                5.8521,
+                108.3198
+            ],
+            "description": "Singapore",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Manila",
+            "bounds": [
+                10.0995,
+                116.4842,
+                19.0995,
+                125.4842
+            ],
+            "description": "Manila",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Hong_Kong",
+            "bounds": [
+                17.8193,
+                109.6694,
+                26.8193,
+                118.6694
+            ],
+            "description": "Hong Kong",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Shanghai",
+            "bounds": [
+                26.7304,
+                116.9737,
+                35.7304,
+                125.9737
+            ],
+            "description": "Shanghai",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Tokyo",
+            "bounds": [
+                31.1762,
+                135.1503,
+                40.1762,
+                144.1503
+            ],
+            "description": "Tokyo",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Seoul",
+            "bounds": [
+                33.0665,
+                122.478,
+                42.0665,
+                131.478
+            ],
+            "description": "Seoul",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Taipei",
+            "bounds": [
+                20.533,
+                117.0654,
+                29.533,
+                126.0654
+            ],
+            "description": "Taipei",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Asia/Kuala_Lumpur",
+            "bounds": [
+                -1.361,
+                97.1869,
+                7.639,
+                106.1869
+            ],
+            "description": "Kuala Lumpur",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Cairo",
+            "bounds": [
+                25.5444,
+                26.7357,
+                34.5444,
+                35.7357
+            ],
+            "description": "Cairo",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Lagos",
+            "bounds": [
+                2.0244,
+                -1.1208,
+                11.0244,
+                7.8792
+            ],
+            "description": "Lagos",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Nairobi",
+            "bounds": [
+                -5.7921,
+                32.3219,
+                3.2079,
+                41.3219
+            ],
+            "description": "Nairobi",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Johannesburg",
+            "bounds": [
+                -30.7041,
+                23.5473,
+                -21.7041,
+                32.5473
+            ],
+            "description": "Johannesburg",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Casablanca",
+            "bounds": [
+                29.0731,
+                -12.0898,
+                38.0731,
+                -3.0898
+            ],
+            "description": "Casablanca",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Africa/Algiers",
+            "bounds": [
+                32.2538,
+                -1.4412,
+                41.2538,
+                7.5588
+            ],
+            "description": "Algiers",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Perth",
+            "bounds": [
+                -36.4505,
+                111.3605,
+                -27.4505,
+                120.3605
+            ],
+            "description": "Perth",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Adelaide",
+            "bounds": [
+                -39.4285,
+                134.1007,
+                -30.4285,
+                143.1007
+            ],
+            "description": "Adelaide",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Brisbane",
+            "bounds": [
+                -31.9698,
+                148.5251,
+                -22.9698,
+                157.5251
+            ],
+            "description": "Brisbane",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Sydney",
+            "bounds": [
+                -38.3688,
+                146.7093,
+                -29.3688,
+                155.7093
+            ],
+            "description": "Sydney",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Melbourne",
+            "bounds": [
+                -42.3136,
+                140.4631,
+                -33.3136,
+                149.4631
+            ],
+            "description": "Melbourne",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Australia/Hobart",
+            "bounds": [
+                -47.3821,
+                142.8272,
+                -38.3821,
+                151.8272
+            ],
+            "description": "Hobart",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Pacific/Auckland",
+            "bounds": [
+                -41.3485,
+                170.2633,
+                -32.3485,
+                179.2633
+            ],
+            "description": "Auckland",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Pacific/Fiji",
+            "bounds": [
+                -22.6416,
+                173.9419,
+                -13.6416,
+                182.9419
+            ],
+            "description": "Fiji",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Atlantic/Reykjavik",
+            "bounds": [
+                59.6466,
+                -26.4426,
+                68.6466,
+                -17.4426
+            ],
+            "description": "Reykjavik",
+            "source": "calculated"
+        },
+        {
+            "timezone": "Atlantic/Azores",
+            "bounds": [
+                33.2412,
+                -30.1756,
+                42.2412,
+                -21.1756
+            ],
+            "description": "Azores",
+            "source": "calculated"
+        }
+    ]
 }
