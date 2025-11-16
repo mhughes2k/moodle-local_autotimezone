@@ -48,6 +48,7 @@ list($options, $unrecognized) = cli_get_params(
     [
         'geojson' => null,
         'output' => null,
+        'distribution' => false,
         'major' => true,
         'help' => false,
     ],
@@ -55,6 +56,7 @@ list($options, $unrecognized) = cli_get_params(
         'h' => 'help',
         'o' => 'output',
         'g' => 'geojson',
+        'd' => 'distribution',
     ]
 );
 
@@ -78,27 +80,53 @@ Usage:
 Options:
     --geojson=PATH      Path to timezone-boundary-builder GeoJSON file
                         (Download from: https://github.com/evansiroky/timezone-boundary-builder/releases)
-    --output=PATH       Output file path (default: timezone_data.json)
+    --output=PATH       Output file path (default: $CFG->dataroot/local_autotimezone/timezone_data.json)
+    --distribution      Output to plugin directory for distribution (maintainers only)
     --major             Only include major timezones (default: true)
     -h, --help          Display this help message
 
 Examples:
-    # Generate from PHP timezone data only
+    # Generate site-specific data (default, stored in Moodle data directory)
     php cli/generate_timezone_data.php
 
     # Generate with GeoJSON data for higher precision
     php cli/generate_timezone_data.php --geojson=/tmp/combined.json
 
+    # Generate for distribution (plugin maintainers only)
+    php cli/generate_timezone_data.php --distribution
+
     # Output to custom location
     php cli/generate_timezone_data.php --output=/tmp/custom_tz_data.json
+
+Note:
+    By default, generated data is stored in the Moodle data directory and will be
+    used in preference to the default distributed data. Use --distribution flag
+    only when updating the default timezone data shipped with the plugin.
 
 EOF;
     echo $help;
     exit(0);
 }
 
-// Set default output path.
-$outputpath = $options['output'] ?? __DIR__ . '/../timezone_data.json';
+// Set default output path to Moodle data directory.
+if (isset($options['distribution'])) {
+    // Output to plugin directory for distribution.
+    $outputpath = $options['output'] ?? __DIR__ . '/../timezone_data.json';
+    cli_writeln('Distribution mode: Updating default plugin timezone data');
+} else {
+    // Output to Moodle data directory (site-specific).
+    $datadir = $CFG->dataroot . '/local_autotimezone';
+    
+    // Ensure data directory exists.
+    if (!file_exists($datadir)) {
+        if (!mkdir($datadir, 0755, true)) {
+            cli_error('Failed to create data directory: ' . $datadir);
+        }
+        cli_writeln('Created data directory: ' . $datadir);
+    }
+    
+    $outputpath = $options['output'] ?? $datadir . '/timezone_data.json';
+}
 
 cli_heading('Timezone Data Generator');
 

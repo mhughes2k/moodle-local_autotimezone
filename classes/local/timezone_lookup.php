@@ -37,6 +37,10 @@ class timezone_lookup {
      * given coordinate falls within any timezone boundary. It uses a combination
      * of bounding box checks and more precise polygon checks for accuracy.
      *
+     * Data is loaded from:
+     * 1. First: $CFG->dataroot/local_autotimezone/timezone_data.json (site-specific, generated data)
+     * 2. Fallback: plugin's default timezone_data.json (distributed with code)
+     *
      * @param float $latitude Latitude coordinate (-90 to 90)
      * @param float $longitude Longitude coordinate (-180 to 180)
      * @return string|null Timezone identifier (e.g., 'Europe/London') or null if not found
@@ -50,8 +54,8 @@ class timezone_lookup {
             return null;
         }
 
-        // Path to timezone data file.
-        $datafile = $CFG->dirroot . '/local/autotimezone/timezone_data.json';
+        // Get path to timezone data file.
+        $datafile = self::get_timezone_data_path();
 
         if (!file_exists($datafile)) {
             debugging('Timezone boundary data file not found at: ' . $datafile, DEBUG_DEVELOPER);
@@ -263,6 +267,57 @@ class timezone_lookup {
      */
     public static function get_all_timezones(): array {
         return \DateTimeZone::listIdentifiers();
+    }
+
+    /**
+     * Get the path to the timezone data file.
+     *
+     * Checks for site-specific data in $CFG->dataroot first, then falls back
+     * to the default distributed data in the plugin directory.
+     *
+     * @return string Path to timezone_data.json file
+     */
+    public static function get_timezone_data_path(): string {
+        global $CFG;
+
+        // Check for site-specific generated data first.
+        $sitedatafile = $CFG->dataroot . '/local_autotimezone/timezone_data.json';
+        if (file_exists($sitedatafile)) {
+            return $sitedatafile;
+        }
+
+        // Fall back to default distributed data.
+        return $CFG->dirroot . '/local/autotimezone/timezone_data.json';
+    }
+
+    /**
+     * Get information about which timezone data file is being used.
+     *
+     * @return array Array with 'path', 'type' (site|default), and 'exists' keys
+     */
+    public static function get_timezone_data_info(): array {
+        global $CFG;
+
+        $sitedatafile = $CFG->dataroot . '/local_autotimezone/timezone_data.json';
+        $defaultdatafile = $CFG->dirroot . '/local/autotimezone/timezone_data.json';
+
+        if (file_exists($sitedatafile)) {
+            return [
+                'path' => $sitedatafile,
+                'type' => 'site',
+                'exists' => true,
+                'size' => filesize($sitedatafile),
+                'modified' => filemtime($sitedatafile),
+            ];
+        }
+
+        return [
+            'path' => $defaultdatafile,
+            'type' => 'default',
+            'exists' => file_exists($defaultdatafile),
+            'size' => file_exists($defaultdatafile) ? filesize($defaultdatafile) : 0,
+            'modified' => file_exists($defaultdatafile) ? filemtime($defaultdatafile) : 0,
+        ];
     }
 
     /**

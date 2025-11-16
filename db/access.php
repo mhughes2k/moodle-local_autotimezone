@@ -28,6 +28,8 @@ $capabilities = [
     'local/autotimezone:use' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [],
+        'archetypes' => [
+            'user' => CAP_ALLOW, // Basically all authenticated users gain permission by default.
+        ],
     ],
 ];

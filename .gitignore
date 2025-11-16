@@ -1,1 +1,4 @@
-docs/
+# Documentation in the docs/ directory is intentionally excluded by default
+# to avoid bundling maintainer-only artefacts. To include docs in the
+# repository (for example when updating the default distributed timezone
+# data), remove or edit this ignore rule.

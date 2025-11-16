@@ -51,11 +51,14 @@ function local_autotimezone_myprofile_navigation(\core_user\output\myprofile\tre
     $enabled = get_config('local_autotimezone', 'enabled');
     $allowedtouse = has_capability('local/autotimezone:use', context_system::instance(), $user, false);
     if (!$enabled) {
+        // TODO this sholdn't be outputted.
         echo "can't use";
         return;
     }
     if (! $allowedtouse) {
         echo "no permission";
+        // TODO Should give a user that the feature is not available to them.
+        // TODO Create a request mechanism.
         return;
     }
     $category = new category(
