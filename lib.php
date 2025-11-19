@@ -136,7 +136,3 @@ function local_autotimezone_user_preferences() {
         ],
     ];
 }
-
-// This function does not seem to be fired.
-// function local_autotimezone_render_navbar_output($output) {
-// }
