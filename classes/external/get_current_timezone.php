@@ -83,10 +83,18 @@ class get_current_timezone extends \core_external\external_api {
 
     /**
      * Autotimezone.com API backend.
-     * @param {string} $usertz User's timezone from profile.
-     * @param {string[]} $params Web Service Parameters.
-     * @return object Status object (status, message, profiletimezone, timezone).
-     * @throws \dml_exception
+     *
+     * Retrieves and processes timezone information for the current user by comparing
+     * the user's profile timezone with detected timezone data.
+     *
+     * @param string $usertz User's timezone from profile
+     * @param string[] $params Web Service parameters
+     * @return object Status object containing:
+     *                - status: Operation status
+     *                - message: Status message
+     *                - profiletimezone: User's profile timezone
+     *                - timezone: Detected/current timezone
+     * @throws \dml_exception Database exception if query fails
      */
     protected static function backend_timezonedb(string $usertz, array $params): object {
         $apikey = get_config('local_autotimezone', 'timezonedbapikey');
@@ -139,8 +147,8 @@ class get_current_timezone extends \core_external\external_api {
      * without relying on external APIs. Falls back to longitude-based calculation
      * if boundary data lookup fails.
      *
-     * @param {string} $usertz User's timezone from profile.
-     * @param {string[]} $params Web Service Parameters.
+     * @param string $usertz User's timezone from profile.
+     * @param array $params Web Service Parameters.
      * @return object Status object (status, message, profiletimezone, timezone)
      */
     protected static function backend_local(string $usertz, array $params): object {
