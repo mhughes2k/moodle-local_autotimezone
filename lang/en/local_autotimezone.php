@@ -52,7 +52,7 @@ $string['backend_timezonedb_desc'] = 'Use the <a href="https://timezonedb.com/">
 This requires registration and an API key to be provided.
 
 A commercial API key is necessary to use this service.';
-$string['checkdeferred'] = 'Automatic Time Zone switching paused';
+$string['checkdeferred'] = 'Pause/Unpause Automatic Time Zone switching';
 $string['cntype:banner'] = 'Banner at top of course page';
 $string['cntype:usermenu'] = 'Item in user menu';
 $string['configcheck'] = 'Configuration Check';
