@@ -210,7 +210,6 @@ class hook_callbacks {
                         'itemtype' => 'link',
                         'title' => $texttitle,
                         'text' => $texttitle,
-                        // 'titleidentifier' => 'local_autotimezone_timezoneconflictindicator',
                     ]
                 );
             }
@@ -312,7 +311,7 @@ class hook_callbacks {
         // Determine visual indicator tone.
         $tone = 'red';  // Default to indicating conflict.
         if ($isdifferentservertimezone && !$isdifferentusertimezone) {
-            // User's prefs match the course, even if different from server
+            // User's prefs match the course, even if different from server.
             $tone = 'green';
         }
 

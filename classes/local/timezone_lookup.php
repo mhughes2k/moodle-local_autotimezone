@@ -16,8 +16,6 @@
 
 namespace local_autotimezone\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Timezone lookup utilities for determining timezone from coordinates.
  *
@@ -29,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class timezone_lookup {
-
     /**
      * Look up timezone from coordinates using cached boundary data.
      *
@@ -132,7 +129,8 @@ class timezone_lookup {
             $latj = $polygon[$j][0];
             $lonj = $polygon[$j][1];
 
-            if ((($loni > $lon) != ($lonj > $lon)) &&
+            if (
+                (($loni > $lon) != ($lonj > $lon)) &&
                 ($lat < ($latj - $lati) * ($lon - $loni) / ($lonj - $loni) + $lati)) {
                 $inside = !$inside;
             }
@@ -240,7 +238,7 @@ class timezone_lookup {
             ];
 
             if (isset($continentranges[$continent])) {
-                list($minlat, $maxlat) = $continentranges[$continent];
+                [$minlat, $maxlat] = $continentranges[$continent];
                 if ($latitude >= $minlat && $latitude <= $maxlat) {
                     $score += 20;
                 } else {

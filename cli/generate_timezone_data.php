@@ -44,7 +44,7 @@ require(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/clilib.php');
 
 // Now get CLI options.
-list($options, $unrecognized) = cli_get_params(
+[$options, $unrecognized] = cli_get_params(
     [
         'geojson' => null,
         'output' => null,
@@ -116,7 +116,7 @@ if (isset($options['distribution'])) {
 } else {
     // Output to Moodle data directory (site-specific).
     $datadir = $CFG->dataroot . '/local_autotimezone';
-    
+
     // Ensure data directory exists.
     if (!file_exists($datadir)) {
         if (!mkdir($datadir, 0755, true)) {
@@ -124,7 +124,7 @@ if (isset($options['distribution'])) {
         }
         cli_writeln('Created data directory: ' . $datadir);
     }
-    
+
     $outputpath = $options['output'] ?? $datadir . '/timezone_data.json';
 }
 
@@ -422,7 +422,7 @@ class timezone_data_generator {
     private function calculate_timezone_bounds(string $tzid): ?array {
         // Use known city coordinates if available.
         if (isset(self::TIMEZONE_CITIES[$tzid])) {
-            list($lat, $lon) = self::TIMEZONE_CITIES[$tzid];
+            [$lat, $lon] = self::TIMEZONE_CITIES[$tzid];
             // Create a box around the city (~500km radius = ~4.5 degrees).
             $margin = 4.5;
             return [
