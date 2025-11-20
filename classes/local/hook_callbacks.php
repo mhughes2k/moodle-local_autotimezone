@@ -188,6 +188,8 @@ class hook_callbacks {
     }
     /**
      * Load the timezone extension for the user menu.
+     * 
+     * @param \core_user\hook\extend_user_menu $hook
      */
     public static function load_datetime_tz_extension_usermenu(core_user\hook\extend_user_menu $hook): void {
         self::check_config();

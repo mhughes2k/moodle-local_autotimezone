@@ -131,7 +131,8 @@ class timezone_lookup {
 
             if (
                 (($loni > $lon) != ($lonj > $lon)) &&
-                ($lat < ($latj - $lati) * ($lon - $loni) / ($lonj - $loni) + $lati)) {
+                ($lat < ($latj - $lati) * ($lon - $loni) / ($lonj - $loni) + $lati)
+                ) {
                 $inside = !$inside;
             }
         }
